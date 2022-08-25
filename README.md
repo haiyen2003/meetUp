@@ -2,8 +2,6 @@
 
 ## Database Schema Design
 
-![meetup-database-schema](../assets/meetup_dbdiagram.png)
-
 ## API Documentation
 
 ## USER AUTHENTICATION/AUTHORIZATION
