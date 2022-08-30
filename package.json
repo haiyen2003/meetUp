@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/haiyen2003/meetUp/issues"
   },
-  "homepage": "https://github.com/haiyen2003/meetUp#readme"
+  "homepage": "https://github.com/haiyen2003/meetUp#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  }
 }
