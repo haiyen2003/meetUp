@@ -40,43 +40,39 @@ router.post(
   async (req, res, next) => {
     const { firstName, lastName, email, password, username } = req.body;
 
-    const checkUsername = await User.findOne({ where: { username: username } });
-    if (checkUsername) {
-      const err = new Error('User already exists');
-      err.status = 403;
-      err.title = 'Login failed';
-      err.errors = ['User with that username already exists'];
-      return next(err);
+    const emailValidation = await User.findOne({ where: { email } });
+    if (emailValidation) {
+      res.status(403)
+      return res.json({
+        "message": "User already exists",
+        "statusCode": 403,
+        "errors": {
+          "email": "User with that email already exists"
+        }
+      })
     };
+    const usernameValidation = await User.findOne({ where: { username } });
+    if (usernameValidation) {
+      res.status(403)
+      return res.json({
+        "message": "User already exists",
+        "statusCode": 403,
+        "errors": {
+          "username": "User with that username already exists"
+        }
+      })
+    };
+    const user = await User.signup({ firstName, lastName, email, username, password });
 
-    const checkUserEmail = await User.findOne({ where: { email: email } });
-    if (checkUserEmail) {
-      const err = new Error('Email already exists');
-      err.status = 403;
-      err.title = 'Login failed';
-      err.errors = ['User with that email already exists'];
-      return next(err);
-    }
-    //   const user = await User.signup({ firstName, lastName, email, username, password });
-
-    // const tokenCookie = await setTokenCookie(res, user);
-    // const info = user.toSafeObject();
-    // info.tokenCookie = tokenCookie;
-    // return res.json({
-    //   info
-    // });
-
-  const user = await User.signup({ firstName, lastName, email, username, password });
-
-  const token = await setTokenCookie(res, user);
-  user.token = token;
-  return res.json({
-    'id': user.id,
-    'firstName': user.firstName,
-    'lastName': user.lastName,
-    'email': user.email,
-    'token': user.token
-  });
+    const token = await setTokenCookie(res, user);
+    user.token = token;
+    return res.json({
+      'id': user.id,
+      'firstName': user.firstName,
+      'lastName': user.lastName,
+      'email': user.email,
+      'token': user.token
+    });
   }
 );
 
