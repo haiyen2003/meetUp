@@ -12,6 +12,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 const { ValidationError } = require('sequelize');
+const routes = require('./routes');
 // Security Middleware
 if (!isProduction) {
     // enable cors only in development
@@ -38,7 +39,6 @@ if (!isProduction) {
 
 
   // backend/app.js
-const routes = require('./routes');
 
 // ...
 
