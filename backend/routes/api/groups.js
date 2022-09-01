@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Group, Membership, User, Venue, GroupImage } = require('../../db/models');
+const { Group, Membership, User, Venue, GroupImage, sequelize } = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const router = express.Router();
@@ -8,16 +8,32 @@ const { Op } = require('sequelize');
 const membership = require('../../db/models/membership');
 
 //get all Groups
-
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll({
-        include: [
-            { model: Membership },
-            { model: GroupImage }
-        ]
+    const groups = await Group.findAll();
+    for (let group of groups) {
+        const members = await group.getMemberships({
+            attributes: [
+                [sequelize.fn("COUNT", sequelize.col("id")), "numMembers"]
+            ]
+        });
+        group.dataValues.numMembers = members[0].dataValues.numMembers;
+        const previewImage = await GroupImage.findOne({
+            where: {
+                [Op.and]: [
+                    { groupId: group.id },
+                    { preview: true }
+                ]
+            }
+        });
+        if (previewImage) {
+            group.dataValues.previewImage = previewImage.dataValues.url
+        }
+    }
+    return res.json({
+        'Groups': groups
     });
-    return res.json(groups);
 })
+
 
 //get all groups by current user (missing numMember)
 router.get('/current', restoreUser, async (req, res, next) => {
