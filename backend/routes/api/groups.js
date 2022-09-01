@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Group, Membership, GroupImage } = require('../../db/models');
+const { Group, Membership, User, Venue, GroupImage } = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const router = express.Router();
@@ -28,7 +28,7 @@ router.get('/current', restoreUser, async (req, res, next) => {
             include: {
                 model: Group,
                 attributes:
-                    ['id','organizerId', 'name', 'about', 'type', 'private', 'city', 'state', 'createdAt', 'updatedAt']
+                    ['id', 'organizerId', 'name', 'about', 'type', 'private', 'city', 'state', 'createdAt', 'updatedAt']
             }
         })
 
@@ -48,6 +48,39 @@ router.get('/current', restoreUser, async (req, res, next) => {
         return res.json({
             'Groups': resultArr
         });
+    }
+})
+
+//get details of a group from an id (missing numMember);
+router.get('/:groupId', async (req, res, next) => {
+    let { groupId } = req.params;
+
+    console.log(groupId);
+    let thisGroup = await Group.findByPk(groupId, {
+        include: [
+            {
+                model: GroupImage,
+                attributes: ['id', 'url', 'preview']
+            },
+            {
+                model: User,
+                as: 'Organizer',
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng']
+            }
+        ]
+    });
+
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return next(error);
+    }
+    else {
+        return res.json(thisGroup);
     }
 })
 
