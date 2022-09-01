@@ -76,12 +76,21 @@ router.delete(
 router.get(
   '/',
   restoreUser,
-  (req, res) => {
+  async (req, res) => {
     const { user } = req;
     if (user) {
-      return res.json({
-        user: user.toSafeObject()
+      let userOjb = await User.findOne({
+        where: {id: user.id}
       });
+
+     const token = await setTokenCookie(res, userOjb);
+     userOjb.token = token;
+     return res.json({
+       'id': user.id,
+       'firstName': user.firstName,
+       'lastName': user.lastName,
+       'email': user.email
+     });
     } else return res.json({});
   }
 );
