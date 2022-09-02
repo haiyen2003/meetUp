@@ -35,7 +35,7 @@ router.get('/', async (req, res, next) => {
 })
 
 
-//get all groups by current user (missing numMember)
+//get all groups by current user (missing numMember - solved)
 router.get('/current', restoreUser, async (req, res, next) => {
     const { user } = req;
     if (user) {
@@ -46,7 +46,8 @@ router.get('/current', restoreUser, async (req, res, next) => {
                 attributes:
                     ['id', 'organizerId', 'name', 'about', 'type', 'private', 'city', 'state', 'createdAt', 'updatedAt']
             }
-        })
+        });
+
 
         let result = [];
         for (let group of currentGroups) {
@@ -56,9 +57,19 @@ router.get('/current', restoreUser, async (req, res, next) => {
                     groupId: jsonGroup.groupId
                 }
             });
+
+            const members = await Membership.findAll({
+                where: {
+                    groupId: jsonGroup.groupId
+                }
+            });
+            let numMembers = members.length;
+            jsonGroup.Group.numMembers = numMembers;
             jsonGroup.Group.previewImage = image.dataValues.url;
             result.push(jsonGroup);
         }
+
+
         let resultArr = [];
         result.forEach(a => resultArr.push(a.Group));
         return res.json({
@@ -70,8 +81,6 @@ router.get('/current', restoreUser, async (req, res, next) => {
 //get details of a group from an id (missing numMember);
 router.get('/:groupId', async (req, res, next) => {
     let { groupId } = req.params;
-
-    console.log(groupId);
     let thisGroup = await Group.findByPk(groupId, {
         include: [
             {
@@ -96,6 +105,12 @@ router.get('/:groupId', async (req, res, next) => {
         return next(error);
     }
     else {
+          const members = await thisGroup.getMemberships({
+            attributes: [
+                [sequelize.fn("COUNT", sequelize.col("id")), "numMembers"]
+            ]
+        });
+        thisGroup.dataValues.numMembers = members[0].dataValues.numMembers;
         return res.json(thisGroup);
     }
 })
