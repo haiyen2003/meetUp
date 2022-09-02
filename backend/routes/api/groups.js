@@ -78,7 +78,7 @@ router.get('/current', restoreUser, async (req, res, next) => {
     }
 })
 
-//get details of a group from an id (missing numMember);
+//get details of a group from an id (missing numMember - solved);
 router.get('/:groupId', async (req, res, next) => {
     let { groupId } = req.params;
     let thisGroup = await Group.findByPk(groupId, {
@@ -101,11 +101,13 @@ router.get('/:groupId', async (req, res, next) => {
 
     if (!thisGroup) {
         const error = new Error("Group couldn't be found");
-        error.status = 404;
-        return next(error);
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
     }
     else {
-          const members = await thisGroup.getMemberships({
+        const members = await thisGroup.getMemberships({
             attributes: [
                 [sequelize.fn("COUNT", sequelize.col("id")), "numMembers"]
             ]
@@ -116,45 +118,56 @@ router.get('/:groupId', async (req, res, next) => {
 })
 
 //Get all Events of a group specified by its id
-router.get('/:groupId/events', async(req, res, next) => {
-const {groupId} = req.params;
-const thisGroupEvents = await Event.findAll({
-    where: {groupId: groupId },
-    attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate'],
-    include: [
-        {
-            model: Group,
-            attributes: ['id', 'name', 'city', 'state'],
+router.get('/:groupId/events', async (req, res, next) => {
+    const { groupId } = req.params;
 
-        },
-        {
-            model: Venue,
-            attributes: ['id', 'city', 'state']
-        }
-    ]
-});
-for (let event of thisGroupEvents) {
-    const attendant = await event.getAttendances({
-        attributes: [
-            [sequelize.fn('COUNT', sequelize.col('id')), 'numAttending']
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        const error = new Error("Group couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const thisGroupEvents = await Event.findAll({
+        where: { groupId: groupId },
+        attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate'],
+        include: [
+            {
+                model: Group,
+                attributes: ['id', 'name', 'city', 'state'],
+
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'city', 'state']
+            }
         ]
     });
-    event.dataValues.numAttending = attendant[0].dataValues.numAttending;
-    const previewImage = await EventImage.findOne({
-        where: {
-            [Op.and]: [
-                { eventId: event.id },
-                { preview: true }
+
+    for (let event of thisGroupEvents) {
+        const attendant = await event.getAttendances({
+            attributes: [
+                [sequelize.fn('COUNT', sequelize.col('id')), 'numAttending']
             ]
+        });
+        event.dataValues.numAttending = attendant[0].dataValues.numAttending;
+        const previewImage = await EventImage.findOne({
+            where: {
+                [Op.and]: [
+                    { eventId: event.id },
+                    { preview: true }
+                ]
+            }
+        });
+        if (previewImage) {
+            event.dataValues.previewImage = previewImage.dataValues.url
         }
-    });
-    if (previewImage) {
-        event.dataValues.previewImage = previewImage.dataValues.url
     }
-}
-return res.json({
-    'Events': thisGroupEvents
-})
+    return res.json({
+        'Events': thisGroupEvents
+    })
 
 })
 
