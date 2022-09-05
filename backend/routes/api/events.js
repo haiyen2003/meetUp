@@ -183,16 +183,16 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         throw new Error('Unauthorized');
     }
     else if (validUser.status === 'member') {
-            const newImage = await EventImage.create({
-                eventId,
-                url,
-                preview
-            });
-            return res.json({
-                'id': newImage.id,
-                'url': newImage.url,
-                'preview': newImage.preview
-            })
+        const newImage = await EventImage.create({
+            eventId,
+            url,
+            preview
+        });
+        return res.json({
+            'id': newImage.id,
+            'url': newImage.url,
+            'preview': newImage.preview
+        })
 
     }
     else {
@@ -200,6 +200,65 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             message: 'You are not an attendee of this event'
         })
     }
+});
+
+// Request to attend an Event based on the Event's Id
+router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
+    let { eventId } = req.params;
+    const thisEvent = await Event.findByPk(eventId);
+
+    if (!thisEvent) {
+        const error = new Error("Event couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const thisEventList = await Attendance.findAll({
+        attributes: ['userId', 'status'],
+        where: { eventId }
+    });
+
+    let thisEventArr = [];
+    thisEventList.forEach(user => {
+        thisEventArr.push([user.dataValues.userId, user.dataValues.status]);
+    })
+
+    for (let id of thisEventArr) {
+        if (id[0] === req.user.id) {
+            if (id[1] === 'pending') {
+                const error = new Error("Attendance has already been requested");
+                error.status = 400;
+                return res.json({
+                    'message': error.message,
+                    'statusCode': error.status
+                });
+            }
+            else if (id[1] === 'member' || id[1] === 'waitlist') {
+                const error = new Error("User is already an attendee of the event");
+                error.status = 400;
+                return res.json({
+                    'message': error.message,
+                    'statusCode': error.status
+                });
+            }
+        }
+    }
+
+    const userId = req.user.id;
+    const newAttendee = await Attendance.create({
+        eventId,
+        userId,
+        status: 'pending'
+    });
+
+    return res.json({
+        'eventId': newAttendee.eventId,
+        'userId': newAttendee.userId,
+        'status': newAttendee.status
+    })
 })
 
 module.exports = router;

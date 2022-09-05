@@ -447,5 +447,62 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
     }
 })
 
+//Request a Membership for a group based on the group's id
+
+router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
+    let { groupId } = req.params;
+    const thisGroup = await Group.findByPk(groupId);
+
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const thisGroupIds = await Membership.findAll({
+        attributes: ['userId', 'status'],
+        where: { groupId }
+    })
+
+    let thisGroupArr = [];
+    thisGroupIds.forEach(user => {
+        thisGroupArr.push([user.dataValues.userId, user.dataValues.status]);
+    })
+
+    for (let id of thisGroupArr) {
+        if (id[0] === req.user.id) {
+            if (id[1] === 'pending') {
+                const error = new Error("Membership has already been requested");
+                error.status = 400;
+                return res.json({
+                    'message': error.message,
+                    'statusCode': error.status
+                });
+            }
+            else if (id[1] === 'member' || id[1] === 'co-host') {
+                const error = new Error("User is already a member of the group");
+                error.status = 400;
+                return res.json({
+                    'message': error.message,
+                    'statusCode': error.status
+                });
+            }
+        }
+    }
+    const userId = req.user.id;
+    const newMember = await Membership.create({
+        groupId,
+        userId,
+        status: 'pending'
+    });
+    return res.json({
+        'groupId': newMember.groupId,
+        'memberId': newMember.userId,
+        'status': newMember.status
+    })
+})
 
 module.exports = router;
