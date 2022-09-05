@@ -276,6 +276,38 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
     })
 
     return res.json(newGroup);
+});
+
+//add an image to a group based on the groups id
+router.post('/:groupId/images', requireAuth, async(req, res, next) =>{
+let {groupId} = req.params;
+const thisUser = req.user;
+const {url, preview} = req.body;
+if(preview === 'true') { preview = true};
+if(preview === 'false'){ preview = false}
+
+const thisGroup = await Group.findByPk(groupId);
+if(!thisGroup){
+    const error = new Error("Group couldn't be found");
+    error.status = 404;
+    return res.json({
+        'message': error.message,
+        'statusCode': error.status
+    });
+}
+if(thisGroup.organizerId === thisUser.id){
+    const newImage = await GroupImage.create({
+        groupId,
+        url,
+        preview
+    });
+    return res.json({
+        'id': newImage.id,
+        'url': newImage.url,
+        'preview': newImage.preview
+    })
+}
+
 })
 
 module.exports = router;
