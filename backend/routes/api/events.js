@@ -183,7 +183,6 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         throw new Error('Unauthorized');
     }
     else if (validUser.status === 'member') {
-
             const newImage = await EventImage.create({
                 eventId,
                 url,
@@ -202,7 +201,5 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         })
     }
 })
-
-
 
 module.exports = router;
