@@ -5,7 +5,41 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const router = express.Router();
 const { Op } = require('sequelize');
+const { check } = require('express-validator');
 
+const validateEvent = [
+    check('venueId')
+        .exists({ checkFalsy: true })
+        .withMessage('Venue does not exist'),
+    check('name')
+        .isLength({ min: 5 })
+        .withMessage('Name must be at least 5 characters'),
+    check('type')
+        .exists({ checkFalsy: true })
+        //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('capacity')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage("Capacity must be an integer"),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage("Price is invalid"),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage("Description is required"),
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .isAfter()
+        .withMessage("Start date must be in the future"),
+    check('endDate').custom((value, { req }) => {
+        if (new Date(value) <= new Date(req.body.startDate)) {
+            throw new Error('End date is less than start date');
+        }
+        return true;
+    })
+]
 //get all Events
 router.get('/', async (req, res, next) => {
     const allEvents = await Event.findAll({
@@ -72,6 +106,7 @@ router.get('/:eventId', async (req, res, next) => {
         ]
     })
     if (!thisEvent) {
+        res.status(404);
         const error = new Error("Event couldn't be found");
         error.status = 404;
         return res.json({
@@ -97,6 +132,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
     const thisEvent = await Event.findByPk(eventId);
 
     if (!thisEvent) {
+        res.status(404);
         const error = new Error("Event couldnt be found");
         error.status = 404;
         return res.json({
@@ -108,6 +144,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
     const thisGroup = await Group.findByPk(thisGroupId);
 
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -116,7 +153,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
         });
     }
     if (req.user) {
-        if (thisGroup.organizerId === req.user.id ) {
+        if (thisGroup.organizerId === req.user.id) {
             const thisEventAttendees = await User.findAll({
                 attributes:
                     ['id', 'firstName', 'lastName'],
@@ -165,6 +202,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
 
     const thisEvent = await Event.findByPk(eventId);
     if (!thisEvent) {
+        res.status(404);
         const error = new Error("Event couldn't be found");
         error.status = 404;
         return res.json({
@@ -204,6 +242,7 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     const thisEvent = await Event.findByPk(eventId);
 
     if (!thisEvent) {
+        res.status(404);
         const error = new Error("Event couldn't be found");
         error.status = 404;
         return res.json({
@@ -257,4 +296,25 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     })
 })
 
+//Edit an Event specified by its id
+
+router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
+    let { eventId } = req.params;
+    const thisEvent = await Event.findByPk(eventId);
+    const thisGroupId = thisEvent.groupId;
+    const thisGroup = await Group.findByPk(thisGroupId);
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const thisVenue = await Venue.findByPk(venueId);
+    const userId = req.user.id;
+
+    if(!thisEvent){
+        res.status(404);
+        const error = new Error("Group couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+})
 module.exports = router;

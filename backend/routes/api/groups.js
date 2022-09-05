@@ -205,6 +205,7 @@ router.get('/:groupId/events', async (req, res, next) => {
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldnt be found");
         error.status = 404;
         return res.json({
@@ -260,6 +261,7 @@ router.get('/:groupId/members', async (req, res, next) => {
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -341,6 +343,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -370,6 +373,7 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, nex
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -405,6 +409,7 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -454,6 +459,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     const thisGroup = await Group.findByPk(groupId);
 
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({
@@ -512,6 +518,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
+        res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
         return res.json({

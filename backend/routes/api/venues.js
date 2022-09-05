@@ -36,6 +36,7 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res, next) => {
 
     const thisVenue = await Venue.findByPk(venueId);
     if (!thisVenue) {
+        res.status(404);
         const error = new Error("Venue couldn't be found");
         error.status = 404;
         return res.json({
