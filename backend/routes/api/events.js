@@ -476,4 +476,51 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
         });
     }
 })
+
+//Delete an Event specified by its id
+router.delete('/:eventId', requireAuth, async (req, res, next) => {
+    const { eventId } = req.params;
+    const thisEvent = await Event.findByPk(eventId);
+
+    if (!thisEvent) {
+        res.status(404);
+        const error = new Error("Event couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const thisUser = await User.findByPk(req.user.id);
+    const thisGroupId = thisEvent.groupId;
+    const thisGroup = await Group.findByPk(thisGroupId);
+
+    const currentStatus = await Membership.findOne({
+        where: {
+            groupId: thisGroupId,
+            userId: req.user.id
+        }
+    });
+
+    if(!currentStatus){
+        res.status(400);
+        const error = new Error("Unauthorized");
+        error.status = 400;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
+        await thisEvent.destroy();
+        res.status(200);
+        return res.json({
+            "message": "Successfully deleted",
+            'statusCode': 200
+        })
+    } else {
+        throw new Error('Unauthorized');
+    }
+})
 module.exports = router;
