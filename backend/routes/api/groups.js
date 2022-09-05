@@ -22,7 +22,7 @@ const validateGroup = [
         .withMessage('About must be 50 characters or more'),
     check('type')
         .exists({ checkFalsy: true })
-       .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
         .withMessage("Type must be 'Online' or 'In Person'"),
     check('private')
         .exists({ checkFalsy: true })
@@ -34,6 +34,25 @@ const validateGroup = [
     check('state')
         .exists({ checkFalsy: true })
         .withMessage('State is required'),
+    handleValidationErrors
+];
+
+const validateVenue = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .withMessage('Street address is required'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage('State is required'),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .withMessage('Latitude is required'),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .withMessage('Longtitude is required'),
     handleValidationErrors
 ]
 //get all Groups
@@ -279,35 +298,70 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
 });
 
 //add an image to a group based on the groups id
-router.post('/:groupId/images', requireAuth, async(req, res, next) =>{
-let {groupId} = req.params;
-const thisUser = req.user;
-const {url, preview} = req.body;
-if(preview === 'true') { preview = true};
-if(preview === 'false'){ preview = false}
+router.post('/:groupId/images', requireAuth, async (req, res, next) => {
+    let { groupId } = req.params;
+    const thisUser = req.user;
+    const { url, preview } = req.body;
+    if (preview === 'true') { preview = true };
+    if (preview === 'false') { preview = false }
 
-const thisGroup = await Group.findByPk(groupId);
-if(!thisGroup){
-    const error = new Error("Group couldn't be found");
-    error.status = 404;
-    return res.json({
-        'message': error.message,
-        'statusCode': error.status
-    });
-}
-if(thisGroup.organizerId === thisUser.id){
-    const newImage = await GroupImage.create({
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    if (thisGroup.organizerId === thisUser.id) {
+        const newImage = await GroupImage.create({
+            groupId,
+            url,
+            preview
+        });
+        return res.json({
+            'id': newImage.id,
+            'url': newImage.url,
+            'preview': newImage.preview
+        })
+    }
+})
+
+//Create a new venue for a group specified by its id
+router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, next) => {
+    let { groupId } = req.params;
+    const thisUserId = req.user.id;
+    const { address, city, state, lat, lng } = req.body;
+
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    let newVenue = await Venue.create({
         groupId,
-        url,
-        preview
-    });
-    return res.json({
-        'id': newImage.id,
-        'url': newImage.url,
-        'preview': newImage.preview
+        address,
+        city,
+        state,
+        lat,
+        lng
     })
-}
 
+    return res.json({
+        'id': newVenue.id,
+        'groupId': newVenue.groupId,
+        'address': newVenue.address,
+        'city': newVenue.city,
+        'state': newVenue.state,
+        'lat': newVenue.lat,
+        'lng': newVenue.lng
+    });
 })
 
 module.exports = router;
