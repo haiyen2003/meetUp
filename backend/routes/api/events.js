@@ -366,4 +366,63 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
         });
     }
 })
+
+//Change the status of an attendance for an event specified by id
+
+router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
+    let { eventId } = req.params;
+    let { userId, status } = req.body;
+
+    const thisEvent = await Event.findByPk(eventId);
+    if (!thisEvent) {
+        res.status(404);
+        const error = new Error("Event couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const currentUser = req.user;
+    const currentUserId = req.user.id;
+    if (!currentUser) {
+        res.status(400);
+        const error = new Error("Current User must be the organizer or a co-host to change attendance status");
+        error.status = 400;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    let thisAttendee = await Attendance.findOne({
+        where: {
+            userId,
+            eventId
+        }
+    });
+    if (!thisAttendee) {
+        res.status(404);
+        const error = new Error("Attendance between the user and the event does not exist");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    if (status === 'pending') {
+        res.status(400);
+        const error = new Error("Cannot change an attendance status to pending");
+        error.status = 400;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    thisAttendee.status = status;
+    await thisAttendee.save();
+    return res.json(thisAttendee);
+})
+
 module.exports = router;
