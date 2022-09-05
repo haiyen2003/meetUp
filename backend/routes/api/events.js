@@ -92,7 +92,6 @@ router.get('/:eventId', async (req, res, next) => {
 })
 
 //Get all attendees of an Event specified by its id
-
 router.get('/:eventId/attendees', async (req, res, next) => {
     const { eventId } = req.params;
     const thisEvent = await Event.findByPk(eventId);
@@ -117,21 +116,18 @@ router.get('/:eventId/attendees', async (req, res, next) => {
         });
     }
     if (req.user) {
-        if (thisGroup.organizerId === req.user.id) {
+        if (thisGroup.organizerId === req.user.id ) {
             const thisEventAttendees = await User.findAll({
                 attributes:
                     ['id', 'firstName', 'lastName'],
-                include: [{
+                include: {
                     model: Attendance,
                     as: 'Attendance',
                     where: { eventId },
                     attributes: ['status'],
                     required: true
-                }]
+                }
             });
-
-
-
             return res.json({
                 'Attendees': thisEventAttendees
             })
