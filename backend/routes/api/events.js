@@ -425,4 +425,54 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     return res.json(thisAttendee);
 })
 
+//Delete attendance to an event specified by id
+router.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
+    let { eventId } = req.params;
+    let { userId } = req.body;
+    const thisEvent = await Event.findByPk(eventId);
+    if (!thisEvent) {
+        res.status(404);
+        const error = new Error("Event couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const groupId = thisEvent.groupId;
+    const thisGroup = await Group.findByPk(groupId);
+    const currentUser = req.user;
+    const thisAttendee = await Attendance.findOne({
+        where: { eventId, userId: req.user.id }
+    });
+    if (!thisAttendee) {
+        res.status(404);
+        const error = new Error('Attendance does not exist for this User');
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const currentStatus = await Membership.findOne({
+        where: { groupId, userId: req.user.id }
+    });
+
+    if (thisGroup.organizerId === currentUser.id || currentUser.id === thisAttendee.userId || currentStatus.status === 'co-host') {
+        await thisAttendee.destroy();
+        res.status(200);
+        return res.json({
+            'message': "Successfully deleted attendance from event"
+        })
+
+    }
+    else {
+        res.status(403);
+        const error = new Error("Only the User or organizer may delete an Attendance");
+        error.status = 403;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+})
 module.exports = router;
