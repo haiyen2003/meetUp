@@ -675,9 +675,37 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
         await thisMembership.destroy();
         res.status(200);
         return res.json({
-            'message': 'Successfully deleted membership from group'
+            'message': 'Successfully deleted membership from group',
+            'statusCode': 200
         })
     }
+});
 
+//Delete a group
+router.delete('/:groupId', requireAuth, async(req, res, next) =>{
+    const {groupId} = req.params;
+    const thisGroup = await Group.findByPk(groupId);
+
+    if(!thisGroup){
+        res.status(404);
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const thisUser = await User.findByPk(req.user.id);
+    if(thisGroup.organizerId !== thisUser.id){
+        throw new Error('Unauthorized');
+    }
+    else{
+        await thisGroup.destroy();
+        res.status(200);
+        return res.json({
+            'message': 'Successfully deleted',
+            'statusCode': 200
+        })
+    }
 })
 module.exports = router;
