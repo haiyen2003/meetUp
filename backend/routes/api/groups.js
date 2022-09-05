@@ -192,6 +192,7 @@ router.get('/:groupId/members', async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName'],
                 include: [{
                     model: Membership,
+                    as: 'Membership',
                     where: {
                         groupId
                     },
@@ -206,6 +207,7 @@ router.get('/:groupId/members', async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName'],
                 include: {
                     model: Membership,
+                    as: 'Membership',
                     where: {
                         groupId,
                         status: {
