@@ -461,7 +461,8 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
         await thisAttendee.destroy();
         res.status(200);
         return res.json({
-            'message': "Successfully deleted attendance from event"
+            'message': "Successfully deleted attendance from event",
+            'statusCode': 200
         })
 
     }
