@@ -5,8 +5,37 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth');
 const router = express.Router();
 const { Op } = require('sequelize');
+const { check } = require('express-validator');
 const membership = require('../../db/models/membership');
 
+
+//Validators:
+
+const validateGroup = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ max: 60 })
+        .withMessage('Name must be 60 characters or less'),
+    check('about')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 50 })
+        .withMessage('About must be 50 characters or more'),
+    check('type')
+        .exists({ checkFalsy: true })
+       .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .withMessage("Type must be 'Online' or 'In Person'"),
+    check('private')
+        .exists({ checkFalsy: true })
+        .isBoolean({ loose: true })
+        .withMessage('Private must be a boolean'),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage('City is required'),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage('State is required'),
+    handleValidationErrors
+]
 //get all Groups
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll();
@@ -36,7 +65,7 @@ router.get('/', async (req, res, next) => {
 
 
 //get all groups by current user (missing numMember - solved)
-router.get('/current', restoreUser, async (req, res, next) => {
+router.get('/current', requireAuth, async (req, res, next) => {
     const { user } = req;
     if (user) {
         const currentGroups = await Membership.findAll({
@@ -220,6 +249,33 @@ router.get('/:groupId/members', async (req, res, next) => {
             return res.json({ Members: thisGroupMembers })
         }
     }
+})
+
+//create a group
+router.post('/', requireAuth, validateGroup, async (req, res, next) => {
+    let { name, about, type, private, city, state } = req.body;
+
+    const organizerId = req.user.id;
+    if (private === 'true') { private = true };
+    if (private === 'false') { private = false }
+
+    let newGroup = await Group.create({
+        organizerId,
+        name,
+        about,
+        type,
+        private,
+        city,
+        state
+    });
+
+    const newMembership = await Membership.create({
+        userId: organizerId,
+        groupId: newGroup.id,
+        status: 'member',
+    })
+
+    return res.json(newGroup);
 })
 
 module.exports = router;
