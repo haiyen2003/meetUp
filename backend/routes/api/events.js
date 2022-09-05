@@ -16,7 +16,7 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({ checkFalsy: true })
-        //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
@@ -301,19 +301,68 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
 router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
     let { eventId } = req.params;
     const thisEvent = await Event.findByPk(eventId);
+    if (!thisEvent) {
+        res.status(404);
+        const error = new Error("Event couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
     const thisGroupId = thisEvent.groupId;
     const thisGroup = await Group.findByPk(thisGroupId);
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
-    const thisVenue = await Venue.findByPk(venueId);
-    const userId = req.user.id;
-
-    if(!thisEvent){
+    if (!thisGroup) {
         res.status(404);
         const error = new Error("Group couldnt be found");
         error.status = 404;
         return res.json({
             'message': error.message,
             'statusCode': error.status
+        });
+    }
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const thisVenue = await Venue.findByPk(venueId);
+    const userId = req.user.id;
+    if (!thisVenue) {
+        res.status(404);
+        const error = new Error("Venue couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const thisUserStatus = await Membership.findOne({
+        where: { groupId: thisGroupId, userId }
+    })
+
+    if (!thisUserStatus) {
+        throw new Error('Unauthorized - not a member of this group');
+    }
+
+    if (thisGroup.organizerId === userId || thisUserStatus.status === 'co-host') {
+        if (venueId) thisEvent.venueId = venueId;
+        if (name) thisEvent.name = name;
+        if (type) thisEvent.type = type;
+        if (capacity) thisEvent.capacity = capacity;
+        if (price) thisEvent.price = price;
+        if (description) thisEvent.description = description;
+        if (startDate) thisEvent.startDate = startDate;
+        if (endDate) thisEvent.endDate = endDate;
+        await thisEvent.save();
+        return res.json({
+            'id': thisEvent.id,
+            'groupId': thisEvent.groupId,
+            'venueId': thisEvent.venueId,
+            'name': thisEvent.name,
+            'type': thisEvent.type,
+            'capacity': thisEvent.capacity,
+            'price': thisEvent.price,
+            'description': thisEvent.description,
+            'startDate': thisEvent.startDate,
+            'endDate': thisEvent.endDate
         });
     }
 })
