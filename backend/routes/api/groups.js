@@ -523,14 +523,15 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     const thisUser = await User.findByPk(req.user.id);
     if (thisGroup.organizerId !== thisUser.id) {
         throw new Error('Unauthorized');
+    } else {
+        if (name) thisGroup.name = name;
+        if (about) thisGroup.about = about;
+        if (type) thisGroup.type = type;
+        if (private !== undefined) thisGroup.private = private;
+        if (city) thisGroup.city = city;
+        if (state) thisGroup.state = state;
+        await thisGroup.save();
+        return res.json(thisGroup);
     }
-    if (name) thisGroup.name = name;
-    if (about) thisGroup.about = about;
-    if (type) thisGroup.type = type;
-    if (private !== undefined) thisGroup.private = private;
-    if (city) thisGroup.city = city;
-    if (state) thisGroup.state = state;
-    await thisGroup.save();
-    return res.json(thisGroup);
 })
 module.exports = router;
