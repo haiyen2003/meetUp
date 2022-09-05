@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true
-    },
+    // id: {
+    //   type: DataTypes.INTEGER,
+    //   primaryKey: true
+    // },
     venueId: {
       type: DataTypes.INTEGER
     },

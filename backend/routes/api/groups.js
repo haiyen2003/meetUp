@@ -10,7 +10,6 @@ const membership = require('../../db/models/membership');
 
 
 //Validators:
-
 const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
@@ -54,6 +53,40 @@ const validateVenue = [
         .exists({ checkFalsy: true })
         .withMessage('Longtitude is required'),
     handleValidationErrors
+]
+
+const validateEvent = [
+    check('venueId')
+        .exists({ checkFalsy: true })
+        .withMessage('Venue does not exist'),
+    check('name')
+        .isLength({ min: 5 })
+        .withMessage('Name must be at least 5 characters'),
+    check('type')
+        .exists({ checkFalsy: true })
+      //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('capacity')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage("Capacity must be an integer"),
+    check('price')
+        .exists({ checkFalsy: true })
+        .isDecimal()
+        .withMessage("Price is invalid"),
+    check('description')
+        .exists({ checkFalsy: true })
+        .withMessage("Description is required"),
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .isAfter()
+        .withMessage("Start date must be in the future"),
+    check('endDate').custom((value, { req }) => {
+        if (new Date(value) <= new Date(req.body.startDate)) {
+            throw new Error('End date is less than start date');
+        }
+        return true;
+    })
 ]
 //get all Groups
 router.get('/', async (req, res, next) => {
@@ -364,4 +397,44 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, nex
     });
 })
 
+//Create an Event for a Group specified by its Id
+router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, next) => {
+    let { groupId } = req.params;
+    const userId = req.user.id;
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    let newEvent = await Event.create({
+        groupId,
+        venueId,
+        name,
+        type,
+        capacity,
+        price,
+        description,
+        startDate,
+        endDate
+    })
+
+    return res.json({
+        'id': newEvent.id,
+        'groupId': newEvent.groupId,
+        'venueId': newEvent.venueId,
+        'name': newEvent.name,
+        'type': newEvent.type,
+        'capacity': newEvent.capacity,
+        'price': newEvent.price,
+        'description': newEvent.description,
+        'startDate': newEvent.startDate,
+        'endDate': newEvent.endDate
+    });
+})
 module.exports = router;
