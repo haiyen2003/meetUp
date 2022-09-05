@@ -171,4 +171,53 @@ router.get('/:groupId/events', async (req, res, next) => {
 
 })
 
+//get members of a group by Id
+
+router.get('/:groupId/members', async (req, res, next) => {
+    const { groupId } = req.params;
+
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    if (req.user) {
+        if (thisGroup.organizerId === req.user.id) {
+            const thisGroupMembers = await User.findAll({
+                attributes: ['id', 'firstName', 'lastName'],
+                include: [{
+                    model: Membership,
+                    where: {
+                        groupId
+                    },
+                    attributes: ['status'],
+                }]
+            })
+
+            return res.json({ Members: thisGroupMembers })
+        }
+        else {
+            const thisGroupMembers = await User.findAll({
+                attributes: ['id', 'firstName', 'lastName'],
+                include: {
+                    model: Membership,
+                    where: {
+                        groupId,
+                        status: {
+                            [Op.notIn]: ['pending'],
+                        }
+                    },
+                    attributes: ['status']
+                }
+            });
+            return res.json({ Members: thisGroupMembers })
+        }
+    }
+})
+
 module.exports = router;
