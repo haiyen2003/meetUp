@@ -422,6 +422,7 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
         where: { groupId, userId }
     })
     if (!currentStatus) {
+        res.status(400);
         throw new Error('Unauthorized');
     }
     if (thisGroup.organizerId === userId || currentStatus.status === 'co-host') {
@@ -483,6 +484,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
             if (id[1] === 'pending') {
                 const error = new Error("Membership has already been requested");
                 error.status = 400;
+                res.status(400);
                 return res.json({
                     'message': error.message,
                     'statusCode': error.status
@@ -491,6 +493,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
             else if (id[1] === 'member' || id[1] === 'co-host') {
                 const error = new Error("User is already a member of the group");
                 error.status = 400;
+                res.status(400);
                 return res.json({
                     'message': error.message,
                     'statusCode': error.status
@@ -529,6 +532,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
 
     const thisUser = await User.findByPk(req.user.id);
     if (thisGroup.organizerId !== thisUser.id) {
+        res.status(400);
         throw new Error('Unauthorized');
     } else {
         if (name) thisGroup.name = name;
@@ -540,5 +544,89 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
         await thisGroup.save();
         return res.json(thisGroup);
     }
+})
+
+//Change the status of a membership for a group specified by id
+router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const { groupId } = req.params;
+    const { memberId, status } = req.body;
+
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        res.status(404);
+        const error = new Error("Group couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const currentUser = req.user;
+    if (!currentUser) {
+        res.status(400);
+        const error = new Error("Current User must be the organizer or a co-host to change status");
+        error.status = 400;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const userId = req.user.id;
+    if (thisGroup.organizerId !== userId && status === 'co-host') {
+        res.status(403);
+        const error = new Error("Current User must be the organizer to add co-host");
+        error.status = 403;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    let thisMember = await Membership.findOne({
+        where: {
+            [Op.and]: [
+                { userId: memberId },
+                { groupId: groupId }
+            ]
+        }
+    });
+    if (!thisMember) {
+        res.status(404);
+        const error = new Error("Membership between the user and the group does not exits");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+
+    const currentUserStatus = await Membership.findOne({
+        where: { groupId, userId }
+    });
+    if (status === 'member') {
+        if (req.user.id !== thisGroup.organizerId || currentUserStatus.status !== 'co-host') {
+            res.status(400);
+            const error = new Error("Current User must be the organizer or a co-host to make someone a member");
+            error.status = 400;
+            return res.json({
+                'message': error.message,
+                'statusCode': error.status
+            });
+        }
+    }
+
+    if (status === 'pending') {
+        res.status(400);
+        const error = new Error("Cannot change a membership status to pending");
+        error.status = 400;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    thisMember.status = status;
+    await thisMember.save();
+    return res.json(thisMember);
 })
 module.exports = router;
