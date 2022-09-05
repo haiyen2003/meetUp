@@ -53,14 +53,25 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res, next) => {
     if (!thisUserStatus) {
         throw new Error('Unauthorized');
     }
-    if (thisGroup.origanizerId === userId || thisUserStatus.status === 'co-host') {
+    if (thisGroup.organizerId === req.user.id || thisUserStatus.status === 'co-host') {
         if (address) thisVenue.address = address;
         if (city) thisVenue.city = city;
         if (state) thisVenue.state = state;
         if (lat) { thisVenue.lat = lat }
         if (lng) { thisVenue.lng = lng }
         await thisVenue.save();
-        return res.json(thisVenue);
+        return res.json({
+            'id': thisVenue.id,
+            'groupId': thisVenue.groupId,
+            'address': thisVenue.address,
+            'city': thisVenue.city,
+            'state': thisVenue.state,
+            'lat': thisVenue.lat,
+            'lng': thisVenue.lng
+        });
+    }
+    else {
+        return res.json({ "message": 'Must be an organizer or cohost to edit venue' })
     }
 })
 module.exports = router;
