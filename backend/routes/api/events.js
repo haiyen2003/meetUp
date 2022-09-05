@@ -160,7 +160,48 @@ router.get('/:eventId/attendees', async (req, res, next) => {
     }
 });
 
+//add an image to event based on the event's id
+router.post('/:eventId/images', requireAuth, async (req, res, next) => {
+    let { eventId } = req.params;
+    const thisUser = req.user;
+    const userId = req.user.id;
+    const { url, preview } = req.body;
 
+    const thisEvent = await Event.findByPk(eventId);
+    if (!thisEvent) {
+        const error = new Error("Event couldn't be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const validUser = await Attendance.findOne({
+        where: { eventId, userId }
+    })
+    if (!validUser) {
+        throw new Error('Unauthorized');
+    }
+    else if (validUser.status === 'member') {
+
+            const newImage = await EventImage.create({
+                eventId,
+                url,
+                preview
+            });
+            return res.json({
+                'id': newImage.id,
+                'url': newImage.url,
+                'preview': newImage.preview
+            })
+
+    }
+    else {
+        return res.json({
+            message: 'You are not an attendee of this event'
+        })
+    }
+})
 
 
 

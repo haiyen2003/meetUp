@@ -7,6 +7,7 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { check } = require('express-validator');
 const membership = require('../../db/models/membership');
+const group = require('../../db/models/group');
 
 
 //Validators:
@@ -64,7 +65,7 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({ checkFalsy: true })
-      //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
@@ -412,29 +413,39 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
         });
     }
 
-    let newEvent = await Event.create({
-        groupId,
-        venueId,
-        name,
-        type,
-        capacity,
-        price,
-        description,
-        startDate,
-        endDate
+    const currentStatus = await Membership.findOne({
+        where: { groupId, userId }
     })
+    if (!currentStatus) {
+        throw new Error('Unauthorized');
+    }
+    if (thisGroup.organizerId === userId || currentStatus.status === 'co-host') {
+        let newEvent = await Event.create({
+            groupId,
+            venueId,
+            name,
+            type,
+            capacity,
+            price,
+            description,
+            startDate,
+            endDate
+        })
 
-    return res.json({
-        'id': newEvent.id,
-        'groupId': newEvent.groupId,
-        'venueId': newEvent.venueId,
-        'name': newEvent.name,
-        'type': newEvent.type,
-        'capacity': newEvent.capacity,
-        'price': newEvent.price,
-        'description': newEvent.description,
-        'startDate': newEvent.startDate,
-        'endDate': newEvent.endDate
-    });
+        return res.json({
+            'id': newEvent.id,
+            'groupId': newEvent.groupId,
+            'venueId': newEvent.venueId,
+            'name': newEvent.name,
+            'type': newEvent.type,
+            'capacity': newEvent.capacity,
+            'price': newEvent.price,
+            'description': newEvent.description,
+            'startDate': newEvent.startDate,
+            'endDate': newEvent.endDate
+        });
+    }
 })
+
+
 module.exports = router;
