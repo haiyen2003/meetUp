@@ -52,7 +52,11 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res, next) => {
         }
     });
     if (!thisUserStatus) {
-        throw new Error('Unauthorized');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
     if (thisGroup.organizerId === req.user.id || thisUserStatus.status === 'co-host') {
         if (address) thisVenue.address = address;
@@ -72,7 +76,11 @@ router.put('/:venueId', requireAuth, validateVenue, async (req, res, next) => {
         });
     }
     else {
-        return res.json({ "message": 'Must be an organizer or cohost to edit venue' })
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
 })
 module.exports = router;

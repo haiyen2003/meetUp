@@ -65,7 +65,7 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({ checkFalsy: true })
-        //  .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .isIn(['Online', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
@@ -87,7 +87,8 @@ const validateEvent = [
             throw new Error('End date is less than start date');
         }
         return true;
-    })
+    }),
+    handleValidationErrors
 ]
 //get all Groups
 router.get('/', async (req, res, next) => {
@@ -431,24 +432,43 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, nex
         });
     }
 
-    let newVenue = await Venue.create({
-        groupId,
-        address,
-        city,
-        state,
-        lat,
-        lng
-    })
-
-    return res.json({
-        'id': newVenue.id,
-        'groupId': newVenue.groupId,
-        'address': newVenue.address,
-        'city': newVenue.city,
-        'state': newVenue.state,
-        'lat': newVenue.lat,
-        'lng': newVenue.lng
+    const thisMembership = await Membership.findOne({
+        where: { groupId, userId: thisUserId }
     });
+
+    if (!thisMembership) {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
+    if (thisGroup.organizerId === req.user.id || thisMembership.status === 'co-host') {
+        let newVenue = await Venue.create({
+            groupId,
+            address,
+            city,
+            state,
+            lat,
+            lng
+        })
+
+        return res.json({
+            'id': newVenue.id,
+            'groupId': newVenue.groupId,
+            'address': newVenue.address,
+            'city': newVenue.city,
+            'state': newVenue.state,
+            'lat': newVenue.lat,
+            'lng': newVenue.lng
+        });
+    } else {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
 })
 
 //Create an Event for a Group specified by its Id
