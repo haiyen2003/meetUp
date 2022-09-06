@@ -409,9 +409,9 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
 router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     let { groupId } = req.params;
     const thisUser = req.user;
-    const { url, preview } = req.body;
-    if (preview === 'true') { preview = true };
-    if (preview === 'false') { preview = false }
+    const { url, previewImage } = req.body;
+    if (previewImage === 'true') { previewImage = true };
+    if (previewImage === 'false') { previewImage = false }
 
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
@@ -427,7 +427,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         const newImage = await GroupImage.create({
             groupId,
             url,
-            preview
+            preview: previewImage
         })
         return res.json({
             'id': newImage.id,
