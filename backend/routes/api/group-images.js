@@ -23,7 +23,7 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     const thisGroupId = thisGroupImage.groupId;
 
     const thisGroup = await Group.findByPk(thisGroupId);
-    if(!thisGroup){
+    if (!thisGroup) {
         res.status(404);
         const error = new Error("Cannot found relationship between group and image");
         error.status = 404;
@@ -33,11 +33,21 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
         });
     }
     const currentStatus = await Membership.findOne({
-        where: {groupId: thisGroupId,
-        userId: req.user.id}
+        where: {
+            groupId: thisGroupId,
+            userId: req.user.id
+        }
     })
 
-    if(thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host'){
+    if (!currentStatus) {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden - No relationship found',
+            "statusCode": 403
+        })
+    }
+
+    else if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         await thisGroupImage.destroy();
         res.status(200);
         return res.json({
