@@ -436,7 +436,11 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         })
     }
     else {
-        throw new Error('User must be the organizer for the group');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
 })
 
@@ -782,7 +786,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     }
     const thisMembership = await Membership.findOne({
-        where: { groupId, userId: memberId }
+        where: { groupId: groupId, userId: memberId }
     });
 
     if (!thisMembership) {
