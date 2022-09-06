@@ -22,7 +22,6 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
         });
     }
     const thisEventId = thisEventImage.eventId;
-
     const thisEvent = await Event.findByPk(thisEventId);
     if (!thisEvent) {
         res.status(404);
@@ -36,22 +35,7 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
     const thisGroupId = thisEvent.groupId;
     const thisGroupEvent = await Group.findByPk(thisGroupId);
 
-    const currentStatus = await Membership.findOne({
-        where: {
-            groupId: thisGroupId,
-            userId: req.user.id
-        }
-    })
-    if (currentStatus) {
-        if (thisGroupEvent.organizerId === req.user.id || currentStatus.status === 'co-host') {
-            await thisEventImage.destroy();
-            res.status(200);
-            return res.json({
-                'message': "Successfully deleted",
-                'statusCode': 200
-            })
-        }
-    } else if (thisGroupEvent.organizerId === req.user.id) {
+    if (thisGroupEvent.organizerId === req.user.id) {
         await thisEventImage.destroy();
         res.status(200);
         return res.json({
@@ -59,6 +43,30 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
             'statusCode': 200
         })
     }
+
+    // const currentStatus = await Membership.findOne({
+    //     where: {
+    //         groupId: thisGroupId,
+    //         userId: req.user.id
+    //     }
+    // })
+    // if (currentStatus) {
+    //     if (thisGroupEvent.organizerId === req.user.id || currentStatus.status === 'co-host') {
+    //         await thisEventImage.destroy();
+    //         res.status(200);
+    //         return res.json({
+    //             'message': "Successfully deleted",
+    //             'statusCode': 200
+    //         })
+    //     }
+    // } else if (thisGroupEvent.organizerId === req.user.id) {
+    //     await thisEventImage.destroy();
+    //     res.status(200);
+    //     return res.json({
+    //         'message': "Successfully deleted",
+    //         'statusCode': 200
+    //     })
+    // }
     else {
         res.status(403);
         return res.json({

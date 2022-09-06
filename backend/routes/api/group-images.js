@@ -32,6 +32,17 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
             'statusCode': error.status
         });
     }
+
+    if (thisGroup.organizerId === req.user.id) {
+        await thisGroupImage.destroy();
+        res.status(200);
+        return res.json({
+            'message': "Successfully deleted",
+            'statusCode': 200
+        })
+    }
+
+    
     const currentStatus = await Membership.findOne({
         where: {
             groupId: thisGroupId,
