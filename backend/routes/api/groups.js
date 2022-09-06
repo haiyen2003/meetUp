@@ -511,11 +511,14 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
     }
 
     const currentStatus = await Membership.findOne({
-        where: { groupId, userId }
+        where: { groupId: groupId, userId: req.user.id }
     })
     if (!currentStatus) {
-        res.status(400);
-        throw new Error('Unauthorized');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden - Unauthorized',
+            "statusCode": 403
+        })
     }
     if (thisGroup.organizerId === userId || currentStatus.status === 'co-host') {
         let newEvent = await Event.create({
@@ -624,9 +627,13 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     }
 
     const thisUser = await User.findByPk(req.user.id);
+
     if (thisGroup.organizerId !== thisUser.id) {
-        res.status(400);
-        throw new Error('Unauthorized');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     } else {
         if (name) thisGroup.name = name;
         if (about) thisGroup.about = about;
@@ -696,7 +703,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     }
     let currentStatus = await Membership.findOne({
-        where: { userId: req.user.id, groupId: groupId}
+        where: { userId: req.user.id, groupId: groupId }
     });
 
     if (!currentStatus) {

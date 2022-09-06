@@ -387,7 +387,7 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
     }
 
     const thisUserStatus = await Membership.findOne({
-        where: { groupId: thisGroupId, userId }
+        where: { groupId: thisGroupId, userId: req.user.id }
     })
 
     if (!thisUserStatus) {
@@ -398,7 +398,7 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
         })
     }
 
-    if (thisGroup.organizerId === userId || thisUserStatus.status === 'co-host') {
+    if (thisGroup.organizerId === req.user.id || thisUserStatus.status === 'co-host') {
         if (venueId) thisEvent.venueId = venueId;
         if (name) thisEvent.name = name;
         if (type) thisEvent.type = type;
