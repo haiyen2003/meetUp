@@ -11,10 +11,10 @@ const validateLogin = [
   check('credential')
     .exists({ checkFalsy: true })
     .notEmpty()
-    .withMessage('Please provide a valid email or username.'),
+    .withMessage('Email is required'),
   check('password')
     .exists({ checkFalsy: true })
-    .withMessage('Please provide a password.'),
+    .withMessage('Password is required'),
   handleValidationErrors
 ];
 
@@ -80,17 +80,17 @@ router.get(
     const { user } = req;
     if (user) {
       let userOjb = await User.findOne({
-        where: {id: user.id}
+        where: { id: user.id }
       });
 
-     const token = await setTokenCookie(res, userOjb);
-     userOjb.token = token;
-     return res.json({
-       'id': user.id,
-       'firstName': user.firstName,
-       'lastName': user.lastName,
-       'email': user.email
-     });
+      const token = await setTokenCookie(res, userOjb);
+      userOjb.token = token;
+      return res.json({
+        'id': user.id,
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'email': user.email
+      });
     } else return res.json({});
   }
 );

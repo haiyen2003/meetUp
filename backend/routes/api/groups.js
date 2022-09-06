@@ -22,8 +22,8 @@ const validateGroup = [
         .withMessage('About must be 50 characters or more'),
     check('type')
         .exists({ checkFalsy: true })
-        .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
-        .withMessage("Type must be 'Online' or 'In Person'"),
+        .isIn(['In person', 'Online'])
+        .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
         .exists({ checkFalsy: true })
         .isBoolean({ loose: true })
@@ -140,6 +140,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 }
             });
 
+
             const members = await Membership.findAll({
                 where: {
                     groupId: jsonGroup.groupId
@@ -147,7 +148,10 @@ router.get('/current', requireAuth, async (req, res, next) => {
             });
             let numMembers = members.length;
             jsonGroup.Group.numMembers = numMembers;
-            jsonGroup.Group.previewImage = image.dataValues.url;
+            if (!image) {
+                jsonGroup.Group.previewImage = "no image";
+            }
+            else { jsonGroup.Group.previewImage = image.dataValues.url }
             result.push(jsonGroup);
         }
 
@@ -197,12 +201,54 @@ router.get('/:groupId', async (req, res, next) => {
         thisGroup.dataValues.numMembers = members[0].dataValues.numMembers;
         return res.json(thisGroup);
     }
+});
+
+// Get all Venues for a group specified by its id
+router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
+    const { groupId } = req.params;
+
+    const thisGroup = await Group.findByPk(groupId);
+    if (!thisGroup) {
+        res.status(404);
+        const error = new Error("Group couldnt be found");
+        error.status = 404;
+        return res.json({
+            'message': error.message,
+            'statusCode': error.status
+        });
+    }
+    const thisMembership = await Membership.findOne({
+        where: { groupId, userId: req.user.id }
+    });
+
+    if (!thisMembership) {
+        if (thisGroup.organizerId === req.user.id) {
+            const thisGroupVenues = await Venue.findAll({
+                where: { groupId: thisGroup.id },
+                attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng']
+            })
+            res.status(200);
+            return res.json({ "Venues": thisGroupVenues });
+        }
+    } else if (thisMembership.status === 'co-host') {
+        const thisGroupVenues = await Venue.findAll({
+            where: { groupId: thisGroup.id },
+            attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng'],
+        })
+        res.status(200);
+        return res.json({ "Venues": thisGroupVenues });
+    } else {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
 })
 
 //Get all Events of a group specified by its id
 router.get('/:groupId/events', async (req, res, next) => {
     const { groupId } = req.params;
-
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
         res.status(404);
@@ -329,7 +375,7 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         groupId: newGroup.id,
         status: 'member',
     })
-
+    res.status(201);
     return res.json(newGroup);
 });
 
@@ -351,17 +397,20 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
             'statusCode': error.status
         });
     }
-    if (thisGroup.organizerId === thisUser.id) {
+    if (thisGroup.organizerId === req.user.id) {
         const newImage = await GroupImage.create({
             groupId,
             url,
             preview
-        });
+        })
         return res.json({
             'id': newImage.id,
             'url': newImage.url,
             'preview': newImage.preview
         })
+    }
+    else {
+        throw new Error('User must be the organizer for the group');
     }
 })
 
@@ -513,6 +562,8 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
         'status': newMember.status
     })
 })
+
+//Edit a group based on its Id
 router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     const { groupId } = req.params;
     let { name, about, type, private, city, state } = req.body;
@@ -682,11 +733,11 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
 });
 
 //Delete a group
-router.delete('/:groupId', requireAuth, async(req, res, next) =>{
-    const {groupId} = req.params;
+router.delete('/:groupId', requireAuth, async (req, res, next) => {
+    const { groupId } = req.params;
     const thisGroup = await Group.findByPk(groupId);
 
-    if(!thisGroup){
+    if (!thisGroup) {
         res.status(404);
         const error = new Error("Group couldn't be found");
         error.status = 404;
@@ -696,10 +747,10 @@ router.delete('/:groupId', requireAuth, async(req, res, next) =>{
         });
     }
     const thisUser = await User.findByPk(req.user.id);
-    if(thisGroup.organizerId !== thisUser.id){
+    if (thisGroup.organizerId !== thisUser.id) {
         throw new Error('Unauthorized');
     }
-    else{
+    else {
         await thisGroup.destroy();
         res.status(200);
         return res.json({
