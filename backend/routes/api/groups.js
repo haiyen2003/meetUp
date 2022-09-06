@@ -89,7 +89,7 @@ const validateEvent = [
         return true;
     }),
     handleValidationErrors
-]
+];
 //get all Groups
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll();
