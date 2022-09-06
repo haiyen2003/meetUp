@@ -40,9 +40,46 @@ const validateEvent = [
         return true;
     }),
     handleValidationErrors
-]
+];
+
+const validateQuery = [
+    check('page')
+        .isInt({ min: 1, max: 10 })
+        .withMessage('Page must be greater than or equal to 0'),
+    check('size')
+        .isInt({ min: 1, max: 20 })
+        .withMessage('Size must be greater than or equal to 0'),
+    check('name')
+        .isString()
+        .optional()
+        .withMessage('Name must be a string'),
+    check('type')
+        .isString()
+        .optional()
+        .withMessage("Type must be 'Online' or 'In Person'"),
+    check('startDate')
+        .isString()
+        .optional()
+        .withMessage("Start date must be a valid datetime"),
+    handleValidationErrors
+];
 //get all Events
-router.get('/', async (req, res, next) => {
+router.get('/', validateQuery, async (req, res, next) => {
+    let pagination = {};
+    let { page, size, name, type, startDate } = req.query;
+    let where = {};
+
+    if (name) where.name = name;
+    if (type) where.type = type;
+    if (startDate) where.startDate = startDate;
+    page = page === undefined ? 0 : parseInt(page);
+    size = size === undefined ? 20 : parseInt(size);
+    if (size >= 1 && page >= 1) {
+        pagination.limit = size;
+        pagination.offset = size * (page - 1);
+    }
+
+
     const allEvents = await Event.findAll({
         attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate'],
         include: [
@@ -55,7 +92,9 @@ router.get('/', async (req, res, next) => {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
             }
-        ]
+        ],
+        where,
+        ...pagination,
 
     });
 
