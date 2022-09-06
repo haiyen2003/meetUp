@@ -658,7 +658,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const thisUser = await User.findByPk(memberId);
     if (!thisUser) {
         res.status(400);
-        const error = new Error("Group couldn't be found");
+        const error = new Error("User couldn't be found");
         error.status = 400;
         return res.json({
             'message': "Validation Error",
@@ -671,7 +671,8 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
 
     let thisMembership = await Membership.findOne({
         where: {
-            [Op.and]: [{ userId: memberId }, { groupId }]
+            userId: thisUser.id,
+            groupId
         }
     });
 
@@ -695,7 +696,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     }
     let currentStatus = await Membership.findOne({
-        where: { [Op.and]: [{ userId: req.user.id }, { groupId }] }
+        where: { userId: req.user.id, groupId: groupId}
     });
 
     if (!currentStatus) {

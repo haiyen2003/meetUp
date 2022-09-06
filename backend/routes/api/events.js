@@ -242,6 +242,8 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
     const thisUser = req.user;
     const userId = req.user.id;
     const { url, previewImage } = req.body;
+    if (previewImage === 'true') { previewImage = true };
+    if (previewImage === 'false') { previewImage = false };
 
     const thisEvent = await Event.findByPk(eventId);
     if (!thisEvent) {
@@ -429,7 +431,6 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
 })
 
 //Change the status of an attendance for an event specified by id
-
 router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     let { eventId } = req.params;
     let { userId, status } = req.body;
