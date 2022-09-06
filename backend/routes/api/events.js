@@ -16,7 +16,7 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({ checkFalsy: true })
-        .isIn(['Online', 'In Person', 'online', 'in person', 'In person'])
+        .isIn(['Online', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('capacity')
         .exists({ checkFalsy: true })
@@ -38,7 +38,8 @@ const validateEvent = [
             throw new Error('End date is less than start date');
         }
         return true;
-    })
+    }),
+    handleValidationErrors
 ]
 //get all Events
 router.get('/', async (req, res, next) => {
@@ -165,6 +166,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
                     required: true
                 }
             });
+            res.status(200);
             return res.json({
                 'Attendees': thisEventAttendees
             })
@@ -186,6 +188,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
                     attributes: ['status']
                 }
             });
+            res.status(200);
             return res.json({
                 'Attendees': thisEventAttendees
             })
@@ -339,7 +342,11 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
     })
 
     if (!thisUserStatus) {
-        throw new Error('Unauthorized - not a member of this group');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
 
     if (thisGroup.organizerId === userId || thisUserStatus.status === 'co-host') {
@@ -365,6 +372,13 @@ router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
             'endDate': thisEvent.endDate
         });
     }
+    else {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
 })
 
 //Change the status of an attendance for an event specified by id
@@ -383,9 +397,10 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
             'statusCode': error.status
         });
     }
-
+    const thisGroupId = thisEvent.groupId;
+    const thisGroup = await Group.findByPk(thisGroupId);
     const currentUser = req.user;
-    const currentUserId = req.user.id;
+
     if (!currentUser) {
         res.status(400);
         const error = new Error("Current User must be the organizer or a co-host to change attendance status");
@@ -420,9 +435,28 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
             'statusCode': error.status
         });
     }
-    thisAttendee.status = status;
-    await thisAttendee.save();
-    return res.json(thisAttendee);
+    let currentStatus = await Membership.findOne({
+        where: { userId: req.user.id, groupId: thisGroupId }
+    });
+    if (!currentStatus) {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
+    if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
+        thisAttendee.status = status;
+        await thisAttendee.save();
+        return res.json(thisAttendee);
+    }
+    else {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
 })
 
 //Delete attendance to an event specified by id
@@ -503,14 +537,12 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
         }
     });
 
-    if(!currentStatus){
-        res.status(400);
-        const error = new Error("Unauthorized");
-        error.status = 400;
+    if (!currentStatus) {
+        res.status(403);
         return res.json({
-            'message': error.message,
-            'statusCode': error.status
-        });
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
     if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         await thisEvent.destroy();
@@ -520,7 +552,11 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
             'statusCode': 200
         })
     } else {
-        throw new Error('Unauthorized');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
 })
 module.exports = router;

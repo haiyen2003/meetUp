@@ -19,7 +19,7 @@ module.exports = {
         description: 'Events for Comic-con goers',
         type: 'In person',
         capacity: 250,
-        price: 15,
+        price: 15.5,
         startDate: '2022-11-20 16:00:00',
         endDate: '2022-11-20 20:00:00'
       },
@@ -30,7 +30,7 @@ module.exports = {
         description: 'For book lovers in the Bay Area',
         type: 'In person',
         capacity: 25,
-        price: 0,
+        price: 85.5,
         startDate: '2022-10-20 18:00:00',
         endDate: '2022-10-20 20:00:00'
       },
@@ -41,7 +41,7 @@ module.exports = {
         description: 'Happy hour for Appacademy student',
         type: 'In person',
         capacity: 50,
-        price: 20,
+        price: 20.3,
         startDate: '2022-9-20 16:00:00',
         endDate: '2022-9-20 19:00:00'
       },
