@@ -229,6 +229,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
             });
             res.status(200);
             return res.json({
+
                 'Attendees': thisEventAttendees
             })
         }
@@ -487,7 +488,12 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         thisAttendee.status = status;
         await thisAttendee.save();
-        return res.json(thisAttendee);
+        return res.json({
+            'id': thisAttendee.id,
+            'eventId': thisAttendee.eventId,
+            'userId': thisAttendee.userId,
+            'status': thisAttendee.status
+        });
     }
     else {
         res.status(403);
