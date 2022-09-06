@@ -256,7 +256,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         });
     }
     const validUser = await Attendance.findOne({
-        where: { eventId: eventId, userId: req.user.id }
+        where: { eventId, userId: req.user.id }
     })
 
     if (!validUser) {
@@ -266,7 +266,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             "statusCode": 403
         })
     }
-    else if (validUser.status === 'member') {
+    else {
         const newImage = await EventImage.create({
             eventId,
             url,
@@ -279,12 +279,6 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             'preview': newImage.preview
         })
 
-    }
-    else {
-        res.status(403);
-        return res.json({
-            message: 'You are not an attendee of this event'
-        })
     }
 });
 
