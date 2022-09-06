@@ -241,7 +241,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
     let { eventId } = req.params;
     const thisUser = req.user;
     const userId = req.user.id;
-    const { url, preview } = req.body;
+    const { url, previewImage } = req.body;
 
     const thisEvent = await Event.findByPk(eventId);
     if (!thisEvent) {
@@ -264,12 +264,13 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             "statusCode": 403
         })
     }
-    if (validUser.status === 'member') {
+    else if (validUser.status === 'member') {
         const newImage = await EventImage.create({
             eventId,
             url,
-            preview
+            preview: previewImage
         });
+
         return res.json({
             'id': newImage.id,
             'url': newImage.url,
