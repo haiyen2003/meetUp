@@ -255,6 +255,22 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             'statusCode': error.status
         });
     }
+
+    const thisGroupId = thisEvent.groupId;
+    const thisGroup = await Group.findByPk(thisGroupId);
+    if (thisGroup.organizerId === req.user.id) {
+        const newImage = await EventImage.create({
+            eventId,
+            url,
+            preview: previewImage
+        });
+
+        return res.json({
+            'id': newImage.id,
+            'url': newImage.url,
+            'preview': newImage.preview
+        })
+    }
     const validUser = await Attendance.findOne({
         where: { eventId, userId: req.user.id }
     })
@@ -266,6 +282,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
             "statusCode": 403
         })
     }
+
     else {
         const newImage = await EventImage.create({
             eventId,
