@@ -66,25 +66,6 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
             "statusCode": 403
         })
     }
-    // if (!currentStatus) {
-    //     res.status(403);
-    //     return res.json({
-    //         "message": 'Forbidden - no relationship found',
-    //         "statusCode": 403
-    //     })
-    // }
-    // else if (thisGroupEvent.organizerId === req.user.id || currentStatus.status === 'co-host') {
-    //     await thisEventImage.destroy();
-    //     res.status(200);
-    //     return res.json({
-    //         'message': "Successfully deleted",
-    //         'statusCode': 200
-    //     })
-    // } else {
-    //     throw new Error('Unauthorized');
-    // }
 })
-
-
 
 module.exports = router;
