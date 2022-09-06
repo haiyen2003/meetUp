@@ -82,12 +82,14 @@ const validateEvent = [
         .exists({ checkFalsy: true })
         .isAfter()
         .withMessage("Start date must be in the future"),
-    check('endDate').custom((value, { req }) => {
-        if (new Date(value) <= new Date(req.body.startDate)) {
-            throw new Error('End date is less than start date');
-        }
-        return true;
-    }),
+    check('endDate')
+        .custom((value, { req }) => {
+            if (new Date(value) <= new Date(req.body.startDate)) {
+                throw new Error('End date is less than start date');
+            }
+            return true;
+        })
+        .withMessage("End date is less than start date"),
     handleValidationErrors
 ];
 //get all Groups
@@ -808,7 +810,11 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
     }
     const thisUser = await User.findByPk(req.user.id);
     if (thisGroup.organizerId !== thisUser.id) {
-        throw new Error('Unauthorized');
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
     }
     else {
         await thisGroup.destroy();
