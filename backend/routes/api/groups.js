@@ -652,7 +652,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
 router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const { groupId } = req.params;
     const { memberId, status } = req.body;
-    const user = req.user;
+    const { user } = req;
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
         res.status(404);
@@ -705,7 +705,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     }
     let currentStatus = await Membership.findOne({
-        where: { userId: req.user.id, groupId: groupId }
+        where: { userId: user.id, groupId: groupId }
     });
 
     if (!currentStatus) {
@@ -715,8 +715,18 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
             "statusCode": 403
         })
     }
+    if (thisGroup.organizerId === user.id) {
+        thisMembership.status = status;
+        await thisMembership.save();
+        return res.json({
+            'id': thisMembership.id,
+            'groupId': thisMembership.groupId,
+            'memberId': thisMembership.userId,
+            'status': thisMembership.status
+        });
+    }
     if (status === 'member') {
-        if (thisGroup.organizerId !== req.user.id || currentStatus.status !== 'co-host') {
+        if (thisGroup.organizerId !== user.id || currentStatus.status !== 'co-host') {
             res.status(400);
             const error = new Error("Current User must be the organizer or a co-host to change status");
             error.status = 400;
@@ -737,9 +747,9 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         }
     }
     else {
-        thisMember.status = status;
-        await thisMember.save();
-        return res.json(thisMember);
+        thisMembership.status = status;
+        await thisMembership.save();
+        return res.json(thisMembership);
     }
 })
 
