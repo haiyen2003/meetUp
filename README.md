@@ -2,6 +2,9 @@
 
 ## Database Schema Design
 
+<img width="840" alt="meetup_dbdiagram" src="https://user-images.githubusercontent.com/101358396/188666953-7e4ec977-3b20-4f6f-bc78-fc2fbdd75d3a.png">
+
+
 ## API Documentation
 
 ## USER AUTHENTICATION/AUTHORIZATION
