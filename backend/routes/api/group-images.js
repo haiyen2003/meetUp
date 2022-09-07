@@ -42,7 +42,6 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
         })
     }
 
-    
     const currentStatus = await Membership.findOne({
         where: {
             groupId: thisGroupId,
