@@ -1,6 +1,5 @@
 // frontend/src/store/session.js
 import { csrfFetch } from './csrf';
-
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
@@ -27,12 +26,11 @@ export const login = (user) => async (dispatch) => {
     }),
   });
   const data = await response.json();
-  dispatch(setUser(data.user));
+  dispatch(setUser(data));
   return response;
 };
 
 const initialState = { user: null };
-
 const sessionReducer = (state = initialState, action) => {
   let newState;
   switch (action.type) {
@@ -49,27 +47,30 @@ const sessionReducer = (state = initialState, action) => {
   }
 };
 
+//restore User
 export const restoreUser = () => async dispatch => {
   const response = await csrfFetch('/api/session');
   const data = await response.json();
-  dispatch(setUser(data.user));
+  dispatch(setUser(data));
   return response;
 };
 
 
 //Sign up
 export const signup = (user) => async (dispatch) => {
-  const { username, email, password } = user;
+  const { username, email, password, firstName, lastName } = user;
   const response = await csrfFetch("/api/users", {
     method: "POST",
     body: JSON.stringify({
       username,
       email,
       password,
+      firstName,
+      lastName
     }),
   });
   const data = await response.json();
-  dispatch(setUser(data.user));
+  dispatch(setUser(data));
   return response;
 };
 

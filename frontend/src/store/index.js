@@ -1,5 +1,4 @@
 //Redux doesnot let import createStore -> configureStore
-
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 
