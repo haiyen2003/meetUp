@@ -18,7 +18,6 @@ function ProfileButton({ user }) {
     const closeMenu = () => {
       setShowMenu(false);
     };
-
     document.addEventListener('click', closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
