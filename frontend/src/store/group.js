@@ -2,8 +2,6 @@
 import { csrfFetch } from './csrf';
 
 const GET_ALL_GROUPS = 'groups/GET_ALL_GROUPS';
-
-
 const getAllGroups = groups => {
     return {
         type: GET_ALL_GROUPS,
@@ -16,7 +14,6 @@ export const fetchGroups = () => async dispatch => {
     if (res.ok) {
         const groups = await res.json();
         dispatch(getAllGroups(groups));
-        console.log(groups, '  IN THUNK ----- ');
         return groups;
     }
 }

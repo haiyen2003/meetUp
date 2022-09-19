@@ -14,18 +14,18 @@ function Groups() {
 
     if (test) {
         groups = Object.values(test);
-        console.log(groups, '---- THIS IS GROUPS');
+        // console.log(groups, '---- THIS IS GROUPS');
     }
 
     useEffect(() => {
         dispatch(fetchGroups())
-            .then((res) => {
-                console.log(res, 'RES -----');
-            })
-            .catch((res) => {
-                const data = res.json()
-                if (data && data.errors) console.log(data.errors, '----- ERROR');
-            })
+        // .then((res) => {
+        //     console.log(res, 'RES -----');
+        // })
+        // .catch((res) => {
+        //     const data = res.json()
+        //     if (data && data.errors) console.log(data.errors, '----- ERROR');
+        // })
     }, [dispatch]);
 
     if (test === undefined) return null;
