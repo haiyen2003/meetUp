@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 //import * as sessionActions from './store/session';
 
 import sessionReducer from './session';
+import groupsReducer from "./group";
 
 // if (process.env.NODE_ENV !== 'production') {
 //   restoreCSRF();
@@ -16,6 +17,7 @@ import sessionReducer from './session';
 
 const rootReducer = combineReducers({
   session: sessionReducer,
+  groups: groupsReducer,
 });
 
 let enhancer;
