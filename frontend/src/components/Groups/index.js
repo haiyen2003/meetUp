@@ -31,17 +31,19 @@ function Groups() {
     if (test === undefined) return null;
     return (
         <div>
-            Hello Debug
             <div>
                 {groups.map((group) => (
                     <div>
-                      <div>{group.name}</div>
-                      <div>{group.about}</div>
-                      <div>{group.organizerId}</div>
-                      <div>{group.type}</div>
-                      <div>{group.city}</div>
-                      <br/>
-                        <NavLink to={`/groups/${group.id}`}>{group.id}</NavLink>
+                        <NavLink to={`/groups/${group.name}`}>{group.name}</NavLink>
+                        <div>{group.about}</div>
+                        <div>Organizer: {group.organizerId}</div>
+                        <div>Type: {group.type}</div>
+                        <div>Private: {group.private.toString()}</div>
+                        <div>City: {group.city}</div>
+                        <div>State: {group.state}</div>
+                        <div>Members: {group.numMembers}</div>
+                        <div>Image: {group.previewImage}</div>
+                        <br />
                     </div>
                 ))}
 
