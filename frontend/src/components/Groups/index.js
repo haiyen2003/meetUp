@@ -34,7 +34,7 @@ function Groups() {
             <div>
                 {groups.map((group) => (
                     <div>
-                        <NavLink to={`/groups/${group.name}`}>{group.name}</NavLink>
+                        <NavLink to={`/groups/${group.id}`}>{group.name}</NavLink>
                         <div>{group.about}</div>
                         <div>Organizer: {group.organizerId}</div>
                         <div>Type: {group.type}</div>
