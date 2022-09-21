@@ -59,14 +59,59 @@ export const createGroupThunk = payload => async (dispatch) => {
         // headers: { 'Content-Type': 'application/json' },
     })
     const data = await res.json();
+    console.log(data, 'THIS IS DATA');
     if (res.ok) {
-        console.log(data, 'THIS IS DATA ----');
         dispatch(createGroup(data));
         return res;
     } else {
         console.log(data, 'THIS IS DATA ----');
+        return data;
     }
 }
+
+//Edit Group
+const EDIT_GROUP = 'groups/EDIT_GROUP';
+const editGroup = group => {
+    return {
+        type: EDIT_GROUP,
+        group
+    }
+}
+
+export const editGroupThunk = group => async (dispatch) => {
+    // const { name, about, type, city, state, isPrivate } = payload;
+    const res = await csrfFetch(`/api/groups/${group.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(group),
+        headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await res.json();
+    if (res.ok) {
+        dispatch(editGroup(data));
+        return data;
+    }
+}
+
+//Delete Group
+const DELETE_GROUP = 'groups/DELETE_GROUP';
+const deleteGroup = groupId => {
+    return {
+        type: DELETE_GROUP,
+        groupId
+    }
+}
+export const deleteGroupThunk = groupId => async dispatch => {
+    const res = await csrfFetch(`/api/groups/${groupId}`, {
+        method: 'DELETE',
+    });
+
+    if (res.ok) {
+        dispatch(deleteGroup(groupId));
+        return res;
+    }
+}
+
+
 const initialState = {};
 const groupsReducer = (state = initialState, action) => {
     let newState;
@@ -86,9 +131,17 @@ const groupsReducer = (state = initialState, action) => {
         case CREATE_GROUP:
             newState = { ...state };
             newState.group = action.group;
-            console.log(newState, 'THIS IS NEW STATE -----');
             return newState;
 
+        case EDIT_GROUP:
+            newState = {...state};
+            newState.group = action.group;
+            return newState;
+
+        case DELETE_GROUP:
+            newState = { ...state };
+            delete newState[action.groupId];
+            return newState;
         default:
             return state;
     }

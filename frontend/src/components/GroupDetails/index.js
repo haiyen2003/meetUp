@@ -5,18 +5,30 @@ import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { Link, NavLink } from 'react-router-dom';
 import './GroupDetails.css';
 import { fetchOneGroup } from '../../store/group';
+import { deleteGroupThunk } from '../../store/group';
 
 export default function GroupDetails() {
     const dispatch = useDispatch();
     const { groupId } = useParams();
-    //const history = useHistory();
+    const history = useHistory();
     const test = useSelector((state) => state.groups);
     //console.log('TEST ------', test);
     const thisGroup = test[groupId];
-    //console.log('THIS GROUP ------', thisGroup);
+    const thisUser = useSelector(state => state.session.user);
+
+    const isOwner = thisUser?.id === thisGroup?.organizerId;
+
+
     useEffect(() => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch]);
+
+    const handleDelete = async groupId => {
+        console.log('BEFORE DELETE');
+        const thisDelete = await dispatch(deleteGroupThunk(groupId));
+        console.log('THIS DELETE HAPPENED');
+        history.push(`/groups`);
+    }
 
     if (!thisGroup) return null;
     return (
@@ -32,6 +44,10 @@ export default function GroupDetails() {
                 <div>State: {thisGroup.state}</div>
                 <div>Members: {thisGroup.numMembers}</div>
                 <div>Image: {thisGroup.previewImage}</div>
+                <div>
+                    {isOwner &&
+                        <button onClick={() => handleDelete(groupId)}>Delete Group</button>}
+                </div>
                 <br />
             </div>
         </>

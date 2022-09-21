@@ -1,65 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import * as sessionActions from '../../store/session';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
-import { Link, NavLink } from 'react-router-dom';
-import './CreateGroup.css';
-import { createGroupThunk } from '../../store/group';
-import * as GroupActions from '../../store/group';
 
-function CreateGroupForm() {
+// frontend/src/components/EditGroup/index.js
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { editGroupThunk } from '../../store/group';
+import { fetchOneGroup } from '../../store/group';
+
+export default function EditGroupForm(group) {
     const history = useHistory();
     const dispatch = useDispatch();
-    const sessionUser = useSelector((state) => state.session.user)
-    const [name, setName] = useState('');
-    const [about, setAbout] = useState('');
-    const [type, setType] = useState('In person');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('CA');
-    const [isPrivate, setPrivate] = useState(false);
+    const sessionUser = useSelector((state) => state.session.user);
+    const id = group.id
+    const [name, setName] = useState(group.name);
+    const [about, setAbout] = useState(group.about);
+    const [type, setType] = useState(group.type);
+    const [city, setCity] = useState(group.city);
+    const [state, setState] = useState(group.state);
+    const [isPrivate, setPrivate] = useState(group.private);
     const [errors, setErrors] = useState([]);
     const [submitted, setSubmitted] = useState(false);
-    if (!sessionUser) {
-        return (
-            <>
-                <h1> Please log in or sign up to create a group</h1>
-            </>
-        )
-    }
 
-    let newGroup = {}
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([]);
         setSubmitted(true);
 
-        const thisNewGroupPayload = {
+        const thisEditGroupPayload = {
+            id,
             name: name,
             about: about,
+            organizerId: sessionUser.id,
             type: type,
             isPrivate,
             city: city,
             state: state
         };
-        console.log(thisNewGroupPayload, 'NEW GROUP PAYLOAD');
-        const newGroup = await dispatch(createGroupThunk(thisNewGroupPayload))
-            .catch(async (errors) => {
-                const data = await errors.json();
-                if (data && data.errors) {
-                    setErrors(data.errors);
-                }
-            })
-        console.log(newGroup, 'THIS IS NEW GROUP');
-        if (errors.length) return;
-        console.log(errors, 'THIS IS ERRORS');
-        history.push(`/groups/`);
-        return newGroup;
+        const thisEditGroup = await dispatch(editGroupThunk(thisEditGroupPayload));
+        const thisGroup = await dispatch(fetchOneGroup(thisEditGroup.id));
+        history.push(`/group/${thisGroup.id}`);
     }
 
-    // if (newGroup.id) {
-    //     return <Redirect to="/groups"></Redirect>;
-    // }
-
+    if (!group) return null;
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -71,7 +53,6 @@ function CreateGroupForm() {
                         })
                     }
                 </ul>
-
                 <div>
                     <label>Name</label>
                     <input
@@ -129,12 +110,9 @@ function CreateGroupForm() {
                     </select>
                 </div>
                 <button type='submit'>
-                    Create Group
+                    Submit
                 </button>
             </form>
-
         </>
     )
 }
-
-export default CreateGroupForm;
