@@ -19,7 +19,6 @@ export const fetchGroups = () => async dispatch => {
     }
 }
 
-
 //Get Groups by Id
 const GET_ONE_GROUP = 'groups/GET_ONE_GROUP';
 const getOneGroup = group => {
@@ -36,7 +35,38 @@ export const fetchOneGroup = id => async dispatch => {
     }
 }
 
+//Create Group
+const CREATE_GROUP = 'groups/CREATE_GROUP';
+const createGroup = (group) => {
+    return {
+        type: CREATE_GROUP,
+        group
+    }
+}
 
+export const createGroupThunk = payload => async (dispatch) => {
+    const { name, about, type, city, state, isPrivate } = payload;
+    const res = await csrfFetch(`/api/groups`, {
+        method: 'POST',
+        body: JSON.stringify({
+            name,
+            about,
+            type,
+            city,
+            state,
+            private: isPrivate,
+        }),
+        // headers: { 'Content-Type': 'application/json' },
+    })
+    const data = await res.json();
+    if (res.ok) {
+        console.log(data, 'THIS IS DATA ----');
+        dispatch(createGroup(data));
+        return res;
+    } else {
+        console.log(data, 'THIS IS DATA ----');
+    }
+}
 const initialState = {};
 const groupsReducer = (state = initialState, action) => {
     let newState;
@@ -52,6 +82,13 @@ const groupsReducer = (state = initialState, action) => {
             newState = { ...state };
             newState[action.group.id] = action.group;
             return newState;
+
+        case CREATE_GROUP:
+            newState = { ...state };
+            newState.group = action.group;
+            console.log(newState, 'THIS IS NEW STATE -----');
+            return newState;
+
         default:
             return state;
     }

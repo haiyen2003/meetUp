@@ -7,6 +7,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import Groups from './components/Groups'
 import GroupDetails from "./components/GroupDetails";
+import CreateGroupForm from "./components/CreateGroup";
 
 function App() {
   const dispatch = useDispatch();
@@ -20,15 +21,17 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <SignupFormPage />
           </Route>
-          <Route exact path = "/groups">
-            <Groups/>
+          <Route exact path="/groups">
+            <Groups />
           </Route>
-          <Route path = "/groups/:groupId">
-            <GroupDetails/>
-            
+          <Route exact path='/groups/new'>
+            <CreateGroupForm />
+          </Route>
+          <Route exact path="/groups/:groupId">
+            <GroupDetails />
           </Route>
         </Switch>
       )}

@@ -7,7 +7,6 @@ import './Groups.css';
 import { fetchGroups } from '../../store/group';
 
 function Groups() {
-
     const dispatch = useDispatch();
     const test = useSelector((state) => state.groups);
     let groups;
@@ -50,7 +49,6 @@ function Groups() {
             </div>
         </div>
     )
-
 }
 
 export default Groups;

@@ -9,24 +9,28 @@ const { check } = require('express-validator');
 const membership = require('../../db/models/membership');
 const group = require('../../db/models/group');
 
-
 //Validators:
 const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
+        .withMessage('Name doesnot exist')
         .isLength({ max: 60 })
         .withMessage('Name must be 60 characters or less'),
     check('about')
         .exists({ checkFalsy: true })
+        .withMessage('About doesnot exist')
         .isLength({ min: 50 })
         .withMessage('About must be 50 characters or more'),
     check('type')
         .exists({ checkFalsy: true })
+        .withMessage('Type doesnot exist')
         .isIn(['In person', 'Online'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
-        .exists({ checkFalsy: true })
+        .exists({ checkFalsy: false })
+        .withMessage('Private doesnot exist')
         .isBoolean({ loose: true })
+        //.isIn([true, false])
         .withMessage('Private must be a boolean'),
     check('city')
         .exists({ checkFalsy: true })
@@ -383,8 +387,8 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
     let { name, about, type, private, city, state } = req.body;
 
     const organizerId = req.user.id;
-    if (private === 'true') { private = true };
-    if (private === 'false') { private = false }
+    // if (private === 'true') { private = true };
+    // if (private === 'false') { private = false }
 
     let newGroup = await Group.create({
         organizerId,
@@ -395,12 +399,12 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         city,
         state
     });
-
-    const newMembership = await Membership.create({
-        userId: organizerId,
-        groupId: newGroup.id,
-        status: 'member',
-    })
+    //should create a new image in Image table;
+    // const newImage = await Membership.create({
+    //     userId: organizerId,
+    //     groupId: newGroup.id,
+    //     status: 'member',
+    // })
     res.status(201);
     return res.json(newGroup);
 });
