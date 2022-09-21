@@ -40,30 +40,16 @@ function CreateGroupForm() {
             state: state
         };
         setErrors([]);
-        // newGroup = await dispatch(GroupActions.createGroupThunk({
-        //     name: name,
-        //     about: about,
-        //     type: type,
-        //     private: isPrivate,
-        //     city: city,
-        //     state: state
-        // }))
-        // .catch(async (res) => {
-        //     const data = await res.json();
-        //     if (data && data.errors) {
-        //         setErrors(data.errors);
-        //     }
-        // })
         console.log(thisNewGroupPayload, 'NEW GROUP PAYLOAD');
         const newGroup = await dispatch(createGroupThunk(thisNewGroupPayload))
-            .catch(async (error) => {
-                const data = await error.json();
-                if (data && data.error) {
-                    console.log(data.error, 'THIS IS DATA ERROR');
+            .catch(async (errors) => {
+                const data = await errors.json();
+                if (data && data.errors) {
+                    console.log(data.errors, 'THIS IS DATA ERROR');
                 }
             })
 
-        history.push(`/groups/${newGroup.id}`)
+        history.push(`/groups/`)
         console.log(newGroup, 'THIS IS NEW GROUP');
         return newGroup;
     }
