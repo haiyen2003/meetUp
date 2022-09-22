@@ -9,6 +9,7 @@ import Groups from './components/Groups'
 import GroupDetails from "./components/GroupDetails";
 import CreateGroupForm from "./components/CreateGroup";
 import EditGroupForm from "./components/EditGroupForm";
+import Events from './components/Events';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +25,9 @@ function App() {
         <Switch>
           <Route exact path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/events">
+            <Events />
           </Route>
           <Route exact path="/groups">
             <Groups />
