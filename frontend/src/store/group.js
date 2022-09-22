@@ -59,12 +59,12 @@ export const createGroupThunk = payload => async (dispatch) => {
         // headers: { 'Content-Type': 'application/json' },
     })
     const data = await res.json();
-    console.log(data, 'THIS IS DATA');
+    //console.log(data, 'THIS IS DATA');
     if (res.ok) {
         dispatch(createGroup(data));
         return res;
     } else {
-        console.log(data, 'THIS IS DATA ----');
+        //console.log(data, 'THIS IS DATA ----');
         return data;
     }
 }
@@ -97,9 +97,9 @@ export const editGroupThunk = (id, group) => async (dispatch) => {
 
     const data = await res.json();
     if (res.ok) {
-      dispatch(editGroup(data));
-     // dispatch(createGroup(data));
-      console.log('this is data', data);
+        dispatch(editGroup(data));
+        // dispatch(createGroup(data));
+        console.log('this is data', data);
         return data;
     } else {
         console.log('errors', data.errors, res.errors);
@@ -133,25 +133,19 @@ const groupsReducer = (state = initialState, action) => {
         case GET_ALL_GROUPS:
             newState = { ...state };
             newState = action.groups.Groups;
-            // action.groups.forEach(group => {
-            //     newState[group.id] = group;
-            // });
             return newState;
         case GET_ONE_GROUP:
             newState = { ...state };
             newState[action.group.id] = action.group;
             return newState;
-
         case CREATE_GROUP:
             newState = { ...state };
             newState.group = action.group;
             return newState;
-
         case EDIT_GROUP:
             newState = { ...state };
             newState[action.group.id] = action.group;
             return newState;
-
         case DELETE_GROUP:
             newState = { ...state };
             delete newState[action.groupId];

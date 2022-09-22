@@ -43,23 +43,28 @@ export default function EditGroupForm() {
             city: city,
             state: state
         };
-        const thisEditGroup = await dispatch(editGroupThunk(groupId, thisEditGroupPayload));
-        console.log(thisEditGroup, 'THIS EDIT GROUP');
-        //const thisGroup = await dispatch(fetchOneGroup(groupId));
-        history.push(`/groups/${groupId}`);
+        // const thisEditGroup = await dispatch(editGroupThunk(groupId, thisEditGroupPayload));
+        // console.log(thisEditGroup, 'THIS EDIT GROUP');
+        // //const thisGroup = await dispatch(fetchOneGroup(groupId));
+        // history.push(`/groups/${groupId}`);
+        return dispatch(editGroupThunk(groupId, thisEditGroupPayload))
+            .then(() => {
+                history.push(`/groups/${groupId}`);
+            })
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) {
+                    setErrors(data.errors);
+                }
+            })
     }
 
     if (!group) return null;
     return (
         <>
             <form onSubmit={handleSubmit}>
-
                 <ul>
-                    {//submitted && errors.length > 0 &&
-                        errors.map((error, i) => {
-                            <li key={i}>{error}</li>
-                        })
-                    }
+                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
                 </ul>
                 <div>
                     <label>Name</label>
