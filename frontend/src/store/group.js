@@ -125,7 +125,6 @@ export const deleteGroupThunk = groupId => async dispatch => {
     }
 }
 
-
 const initialState = {};
 const groupsReducer = (state = initialState, action) => {
     let newState;

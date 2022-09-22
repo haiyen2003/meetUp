@@ -15,9 +15,6 @@ export const fetchEvents = () => async dispatch => {
         dispatch(getAllEvents(events));
         return events;
     }
-    else {
-        console.log('error', fetchEvents);
-    }
 }
 
 //Get Events by Id

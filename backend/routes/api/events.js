@@ -64,7 +64,7 @@ const validateQuery = [
     handleValidationErrors
 ];
 //get all Events
-router.get('/', validateQuery, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     let pagination = {};
     let { page, size, name, type, startDate } = req.query;
     let where = {};
