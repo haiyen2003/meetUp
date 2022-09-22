@@ -78,17 +78,31 @@ const editGroup = group => {
     }
 }
 
-export const editGroupThunk = group => async (dispatch) => {
-    // const { name, about, type, city, state, isPrivate } = payload;
-    const res = await csrfFetch(`/api/groups/${group.id}`, {
+export const editGroupThunk = (id, group) => async (dispatch) => {
+    //const { name, about, type, city, state, isPrivate } = group;
+    console.log('THIS IS GROUP ID', group);
+    const res = await csrfFetch(`/api/groups/${id}`, {
         method: 'PUT',
-        body: JSON.stringify(group),
+        body: JSON.stringify(
+            // name,
+            // about,
+            // type,
+            // city,
+            // state,
+            // private: isPrivate,
+            group
+        ),
         headers: { 'Content-Type': 'application/json' },
     })
+
     const data = await res.json();
     if (res.ok) {
-        dispatch(editGroup(data));
+      dispatch(editGroup(data));
+     // dispatch(createGroup(data));
+      console.log('this is data', data);
         return data;
+    } else {
+        console.log('errors', data.errors, res.errors);
     }
 }
 
@@ -134,8 +148,8 @@ const groupsReducer = (state = initialState, action) => {
             return newState;
 
         case EDIT_GROUP:
-            newState = {...state};
-            newState.group = action.group;
+            newState = { ...state };
+            newState[action.group.id] = action.group;
             return newState;
 
         case DELETE_GROUP:

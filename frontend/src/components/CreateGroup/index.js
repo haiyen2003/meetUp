@@ -41,35 +41,23 @@ function CreateGroupForm() {
             city: city,
             state: state
         };
-        console.log(thisNewGroupPayload, 'NEW GROUP PAYLOAD');
-        const newGroup = await dispatch(createGroupThunk(thisNewGroupPayload))
-            .catch(async (errors) => {
-                const data = await errors.json();
+        return dispatch(createGroupThunk(thisNewGroupPayload))
+            .then(() => {
+                history.push(`/groups/`);
+            })
+            .catch(async (res) => {
+                const data = await res.json();
                 if (data && data.errors) {
                     setErrors(data.errors);
                 }
             })
-        console.log(newGroup, 'THIS IS NEW GROUP');
-        if (errors.length) return;
-        console.log(errors, 'THIS IS ERRORS');
-        history.push(`/groups/`);
-        return newGroup;
     }
-
-    // if (newGroup.id) {
-    //     return <Redirect to="/groups"></Redirect>;
-    // }
 
     return (
         <>
             <form onSubmit={handleSubmit}>
-
                 <ul>
-                    {//submitted && errors.length > 0 &&
-                        errors.map((error, i) => {
-                            <li key={i}>{error}</li>
-                        })
-                    }
+                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
                 </ul>
 
                 <div>

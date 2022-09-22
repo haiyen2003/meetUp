@@ -8,6 +8,7 @@ import { fetchOneGroup } from '../../store/group';
 import { deleteGroupThunk } from '../../store/group';
 
 export default function GroupDetails() {
+
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const history = useHistory();
@@ -17,8 +18,10 @@ export default function GroupDetails() {
     const thisUser = useSelector(state => state.session.user);
 
     const isOwner = thisUser?.id === thisGroup?.organizerId;
-
-
+    const routeChange = () => {
+        let path = `/groups/${groupId}/edit`
+        history.push(path);
+    }
     useEffect(() => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch]);
@@ -47,6 +50,10 @@ export default function GroupDetails() {
                 <div>
                     {isOwner &&
                         <button onClick={() => handleDelete(groupId)}>Delete Group</button>}
+                </div>
+                <div>
+                    {isOwner &&
+                        <button onClick={routeChange}>Edit Group</button>}
                 </div>
                 <br />
             </div>
