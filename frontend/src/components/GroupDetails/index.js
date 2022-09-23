@@ -13,7 +13,6 @@ export default function GroupDetails() {
     const { groupId } = useParams();
     const history = useHistory();
     const test = useSelector((state) => state.groups);
-    //console.log('TEST ------', test);
     const thisGroup = test[groupId];
     const thisUser = useSelector(state => state.session.user);
 
@@ -22,14 +21,16 @@ export default function GroupDetails() {
         let path = `/groups/${groupId}/edit`
         history.push(path);
     }
+    const routeChange2 = () => {
+        let path = `/groups/${groupId}/events/new`
+        history.push(path);
+    }
     useEffect(() => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch]);
 
     const handleDelete = async groupId => {
-        console.log('BEFORE DELETE');
         const thisDelete = await dispatch(deleteGroupThunk(groupId));
-        console.log('THIS DELETE HAPPENED');
         history.push(`/groups`);
     }
 
@@ -54,6 +55,10 @@ export default function GroupDetails() {
                 <div>
                     {isOwner &&
                         <button onClick={routeChange}>Edit Group</button>}
+                </div>
+                <div>
+                    {isOwner &&
+                        <button onClick={routeChange2}>Create Event</button>}
                 </div>
                 <br />
             </div>

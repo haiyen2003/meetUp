@@ -42,9 +42,10 @@ const createEvent = (event) => {
     }
 }
 
-export const createEventThunk = payload => async (dispatch) => {
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = payload;
-    const res = await csrfFetch(`/api/events`, {
+export const createEventThunk = (payload) => async (dispatch) => {
+    const { groupId, venueId, name, type, capacity, price, description, startDate, endDate } = payload;
+    console.log(payload.groupId, 'THIS IS GROUP ID');
+    const res = await csrfFetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
         body: JSON.stringify({
             venueId,

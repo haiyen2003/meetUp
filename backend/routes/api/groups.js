@@ -399,6 +399,14 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         city,
         state
     });
+    let venue = await Venue.create({
+        groupId: newGroup.id,
+        address: '901 Jefferson St',
+        city: 'San Francisco',
+        state: 'CA',
+        lat: 90.00,
+        lng: 90.00
+    })
     //should create a new image in Image table;
     // const newImage = await Membership.create({
     //     userId: organizerId,
@@ -509,6 +517,8 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
     let { groupId } = req.params;
     const userId = req.user.id;
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    console.log(req.body, 'THIS IS REQ BODY BACKEND -----');
+    console.log(groupId, 'THIS IS GROUP ID BACKEND -----');
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
         res.status(404);
@@ -519,17 +529,17 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
             'statusCode': error.status
         });
     }
-
-    const currentStatus = await Membership.findOne({
-        where: { groupId: groupId, userId: req.user.id }
-    })
-    if (!currentStatus) {
-        res.status(403);
-        return res.json({
-            "message": 'Forbidden - Unauthorized',
-            "statusCode": 403
-        })
-    }
+    //need to uncommet this back in
+    // const currentStatus = await Membership.findOne({
+    //     where: { groupId: groupId, userId: req.user.id }
+    // })
+    // if (!currentStatus) {
+    //     res.status(403);
+    //     return res.json({
+    //         "message": 'Forbidden - Unauthorized',
+    //         "statusCode": 403
+    //     })
+    // }
     if (thisGroup.organizerId === userId || currentStatus.status === 'co-host') {
         let newEvent = await Event.create({
             groupId,
@@ -625,7 +635,7 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     if (private === 'true') { private = true };
     if (private === 'false') { private = false };
     console.log('GROUP ID FROM BACK END --------', groupId);
-    console.log(typeof(+groupId), 'TYPE OF GROUP ID ------')
+    console.log(typeof (+groupId), 'TYPE OF GROUP ID ------')
     const thisGroup = await Group.findByPk(+groupId);
     console.log('THIS GROUP BACKEND ----', thisGroup);
 

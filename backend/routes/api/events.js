@@ -132,7 +132,7 @@ router.get('/:eventId', async (req, res, next) => {
         include: [
             {
                 model: Group,
-                attributes: ['id', 'name', 'private', 'city', 'state'],
+                attributes: ['id', 'organizerId', 'name', 'private', 'city', 'state'],
 
             },
             {
@@ -578,8 +578,9 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
 //Delete an Event specified by its id
 router.delete('/:eventId', requireAuth, async (req, res, next) => {
     const { eventId } = req.params;
+    console.log(eventId, 'eventId -------------');
     const thisEvent = await Event.findByPk(eventId);
-
+    console.log(thisEvent, 'THIS EVENT TO DELETE ---------')
     if (!thisEvent) {
         res.status(404);
         const error = new Error("Event couldn't be found");
@@ -594,20 +595,20 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
     const thisGroupId = thisEvent.groupId;
     const thisGroup = await Group.findByPk(thisGroupId);
 
-    const currentStatus = await Membership.findOne({
-        where: {
-            groupId: thisGroupId,
-            userId: req.user.id
-        }
-    });
+    // const currentStatus = await Membership.findOne({
+    //     where: {
+    //         groupId: thisGroupId,
+    //         userId: req.user.id
+    //     }
+    // });
 
-    if (!currentStatus) {
-        res.status(403);
-        return res.json({
-            "message": 'Forbidden',
-            "statusCode": 403
-        })
-    }
+    // if (!currentStatus) {
+    //     res.status(403);
+    //     return res.json({
+    //         "message": 'Forbidden',
+    //         "statusCode": 403
+    //     })
+    // }
     if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         await thisEvent.destroy();
         res.status(200);

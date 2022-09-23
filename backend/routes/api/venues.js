@@ -28,6 +28,14 @@ const validateVenue = [
         .withMessage('Longitude is not valid'),
     handleValidationErrors
 ]
+
+router.get('/', async (req, res, next) => {
+    const venues = await Venue.findAll();
+    return res.json({
+        'statusCode': 200,
+        'Venues': venues
+    });
+})
 //Edit a venue specified by its id
 router.put('/:venueId', requireAuth, validateVenue, async (req, res, next) => {
     const userId = req.user.id;

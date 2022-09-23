@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import './Events.css';
 import { fetchEvents } from '../../store/event';
+import EventDetails from '../EventDetails';
 
 function Events() {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.events)
-    console.log(data, 'THIS IS DATA');
     let events;
 
     if (data) {
         events = Object.values(data);
-        console.log(events, 'THIS IS EVENTS DATA');
     }
     useEffect(() => {
         dispatch(fetchEvents())
