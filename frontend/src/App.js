@@ -29,29 +29,29 @@ function App() {
           <Route exact path="/signup">
             <SignupFormPage />
           </Route>
-          <Route exact path='/groups/new'>
-            <CreateGroupForm />
-          </Route>
-          <Route exact path='/groups/:groupId/events/new'>
+          <Route path='/groups/:groupId/events/new'>
             <CreateEventForm />
           </Route>
           <Route exact path="/events/:eventId/edit">
-            <EditEventForm/>
+            <EditEventForm />
           </Route>
           <Route exact path="/events/:eventId">
             <EventDetails />
           </Route>
-          <Route path="/events">
-            <Events />
-          </Route>
           <Route exact path='/groups/:groupId/edit'>
             <EditGroupForm />
+          </Route>
+          <Route exact path='/groups/new'>
+            <CreateGroupForm />
           </Route>
           <Route exact path="/groups/:groupId">
             <GroupDetails />
           </Route>
           <Route exact path="/groups">
             <Groups />
+          </Route>
+          <Route path="/events">
+            <Events />
           </Route>
         </Switch>
       )}
