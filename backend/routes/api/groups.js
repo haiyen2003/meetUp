@@ -99,12 +99,12 @@ const validateEvent = [
 //get all Groups
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll({
-        // include: [
-        //     {
-        //         model: User,
-        //         attributes: ['firstName']
-        //     }
-        // ]
+        include: [
+            {
+                model: User,
+                as: 'Organizer'
+            }
+        ]
     });
     for (let group of groups) {
         const members = await group.getMemberships({

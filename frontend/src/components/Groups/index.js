@@ -32,6 +32,10 @@ function Groups() {
     return (
         <div>
             <div className='map-container'>
+                <div className='top-container'>
+                    <NavLink className="top-link top-link-underlined" to={`/groups`}>Groups</NavLink>
+                    <NavLink className='top-link' to={`/events`}>Events</NavLink>
+                </div>
                 {groups.map((group) => (
                     <div className='group-card'>
                         <div className='group-left'>
@@ -40,12 +44,13 @@ function Groups() {
                         <div className='group-right'>
                             <NavLink className='group-name' to={`/groups/${group.id}`}>{group.name}</NavLink>
                             <div className='group-city-state'>{group.city.toUpperCase()}, {group.state.toUpperCase()}</div>
-                            <div className = 'group-about'>{group.about}</div>
-                            <div>Organizer: {group.organizerId}</div>
-                            <div className = 'group-member-pulic'>
-                                {group.numMembers} {group.numMembers === 1 ? "member" : "members" } · {group.private ? "Private" : "Public" }
+                            <div className='group-organizer'> Organized by: {Object(Object(groups[0])['Organizer'])["firstName"]}</div>
+
+                            <div className='group-about'>{group.about}</div>
+
+                            <div className='group-member-pulic'>
+                                {group.numMembers} {group.numMembers === 1 ? "member" : "members"} · {group.private ? "Private" : "Public"}
                             </div>
-                            <div>Type: {group.type}</div>
                         </div>
                         <br />
                     </div>
