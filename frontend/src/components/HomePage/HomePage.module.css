@@ -46,6 +46,7 @@
 .bottomDiv {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-direction: row;
     max-width: 1120px;
     padding: 60px;
