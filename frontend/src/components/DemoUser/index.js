@@ -15,7 +15,7 @@ export default function LoginDemoUser() {
     }
     return (
         <form onSubmit={handleSubmit}>
-            <button type='submit'>Demo User</button>
+            <button className = 'button-demo'type='submit'>Demo User</button>
         </form>
     )
 }

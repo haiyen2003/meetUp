@@ -98,12 +98,20 @@ const validateEvent = [
 ];
 //get all Groups
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll();
+    const groups = await Group.findAll({
+        // include: [
+        //     {
+        //         model: User,
+        //         attributes: ['firstName']
+        //     }
+        // ]
+    });
     for (let group of groups) {
         const members = await group.getMemberships({
             attributes: [
                 [sequelize.fn("COUNT", sequelize.col("id")), "numMembers"]
-            ]
+            ],
+
         });
         group.dataValues.numMembers = members[0].dataValues.numMembers;
         const previewImage = await GroupImage.findOne({

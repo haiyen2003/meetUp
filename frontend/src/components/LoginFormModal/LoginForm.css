@@ -5,6 +5,7 @@
     color: black;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
 }
 .button-login:hover{
     color: #0098ae;

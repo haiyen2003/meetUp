@@ -1,0 +1,58 @@
+.group-card {
+    border-top: 0.5px solid grey;
+    display: flex;
+    flex-direction: row;
+    width: 640px;
+    height: 200px;
+    padding: 20px 5px 0px 5px;
+}
+
+.group-left {
+    display: flex;
+    width: 180px;
+    height: 100px;
+}
+
+.group-left>image {
+    width: 240px;
+}
+
+.image{
+    border-radius: 5px;
+}
+
+.map-container {
+     /* border-top: 0.5px solid grey;  */
+    width: 1000px;
+    margin: auto;
+}
+
+.group-name {
+    display: flex;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 20px;
+    color: black;
+
+}
+
+.group-city-state {
+    display: flex;
+    color: grey;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.group-about {
+    display: flex;
+    color: grey;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.group-member-pulic{
+    display: flex;
+    color: grey;
+    font-size: 14px;
+}

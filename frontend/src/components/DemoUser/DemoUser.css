@@ -1,0 +1,11 @@
+.button-demo {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.button-demo:hover{
+    color: #0098ae;
+}

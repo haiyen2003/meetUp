@@ -28,20 +28,25 @@ function Groups() {
     }, [dispatch]);
 
     if (test === undefined) return null;
+
     return (
         <div>
-            <div>
+            <div className='map-container'>
                 {groups.map((group) => (
-                    <div>
-                        <NavLink to={`/groups/${group.id}`}>{group.name}</NavLink>
-                        <div>{group.about}</div>
-                        <div>Organizer: {group.organizerId}</div>
-                        <div>Type: {group.type}</div>
-                        <div>Private: {group.private.toString()}</div>
-                        <div>City: {group.city}</div>
-                        <div>State: {group.state}</div>
-                        <div>Members: {group.numMembers}</div>
-                        <div>Image: {group.previewImage}</div>
+                    <div className='group-card'>
+                        <div className='group-left'>
+                            <img className='image' src={group.previewImage} alt='group-img'></img>
+                        </div>
+                        <div className='group-right'>
+                            <NavLink className='group-name' to={`/groups/${group.id}`}>{group.name}</NavLink>
+                            <div className='group-city-state'>{group.city.toUpperCase()}, {group.state.toUpperCase()}</div>
+                            <div className = 'group-about'>{group.about}</div>
+                            <div>Organizer: {group.organizerId}</div>
+                            <div className = 'group-member-pulic'>
+                                {group.numMembers} {group.numMembers === 1 ? "member" : "members" } · {group.private ? "Private" : "Public" }
+                            </div>
+                            <div>Type: {group.type}</div>
+                        </div>
                         <br />
                     </div>
                 ))}

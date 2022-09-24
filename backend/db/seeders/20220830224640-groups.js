@@ -19,7 +19,8 @@ module.exports = {
         type: 'In person',
         private: false,
         city: 'Oakland',
-        state: 'CA'
+        state: 'CA',
+        
       },
       {
         organizerId: 2,

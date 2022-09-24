@@ -14,22 +14,22 @@ module.exports = {
      return queryInterface.bulkInsert('GroupImages', [
       {
         groupId: 1,
-        url: 'www.url1.com',
+        url: 'https://www.eatthis.com/wp-content/uploads/sites/4/2020/06/dining-out.jpg',
         preview: true
       },
       {
         groupId: 2,
-        url: 'www.url2.com',
+        url: 'https://www.eatthis.com/wp-content/uploads/sites/4/2022/08/Friends-out-to-dinner.jpg?quality=82&strip=1',
         preview: true
       },
       {
         groupId: 3,
-        url: 'www.url3.com',
+        url: 'http://foodsafetytrainingcertification.com/wp-content/uploads/2019/08/eating_out_dining_food_illness_food_safety_001_shutterstock_1201677928.jpg',
         preview: true
       },
       {
         groupId: 4,
-        url: 'www.url4.com',
+        url: 'https://mydario.com/wp-content/uploads/2018/04/eating-out.jpg',
         preview: true
       },
     ], {});

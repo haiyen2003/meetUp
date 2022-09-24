@@ -15,9 +15,7 @@ function SignupFormPage() {
     const [lastName, setLastname] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState([]);
-
     if (sessionUser) return <Redirect to="/" />;
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (password === confirmPassword) {
@@ -92,7 +90,7 @@ function SignupFormPage() {
                     required
                 />
             </label>
-            <button type="submit">Sign Up</button>
+            <button className='button-signup' type="submit">Sign Up</button>
         </form>
     );
 }

@@ -21,7 +21,7 @@ function Navigation({ isLoaded }) {
             <>
                 <LoginDemoUser />
                 <LoginFormModal />
-                <NavLink to="/signup">Sign Up</NavLink>
+                <NavLink className='button-signup' to="/signup">Sign Up</NavLink>
             </>
         );
     }
