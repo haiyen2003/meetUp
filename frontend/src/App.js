@@ -13,6 +13,7 @@ import EditGroupForm from "./components/EditGroupForm";
 import Events from './components/Events';
 import EventDetails from "./components/EventDetails";
 import EditEventForm from "./components/EditEventForm";
+import Home from "./components/Home";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+           <Route exact path="/">
+            <Home/>
+          </Route>
           <Route exact path="/signup">
             <SignupFormPage />
           </Route>
