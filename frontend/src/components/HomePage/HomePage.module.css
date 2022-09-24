@@ -2,54 +2,105 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    max-width: 80%;
+    box-sizing: content-box;
     align-items: center;
+}
+
+.container {
+    display: flex;
+    margin: auto;
+    padding: 50px 0px 0px 0px;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1120px;
+}
+
+.detailMessage {
+    font-size: 16px;
+    text-align: left;
 }
 
 .topDiv {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
+}
+
+.bottomText {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.bottomText2 {
+    font-size: 16px
+}
+
+.middleDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
 }
 
 .bottomDiv {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
-    max-width: 1040px;
+    max-width: 1120px;
+    padding: 60px;
+}
+
+.middleTextContainer {
+    display: flex;
+    justify-content: column;
+    flex-direction: column;
+    align-items: center;
 }
 
 .groups {
     display: flex;
-    padding-right: 20px;
+    padding: 0px 24px;
     flex-direction: column;
+    align-items: center;
 }
 
 .events {
     display: flex;
-    padding-right: 20px;
+    padding: 0px 24px;
     flex-direction: column;
+    align-items: center;
 }
 
 .createGroup {
     display: flex;
-    padding-right: 20px;
+    padding: 0px 24px;
     flex-direction: column;
+    align-items: center;
 }
 
 .mainMessage {
     display: flex;
-    padding-right: 40px
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 2em;
+    padding: 0px 0px 0px 0px;
+    text-align: left;
 }
 
 .mainImage {
     display: flex;
+    align-items: center;
 }
 
 .leftMessage {
     display: flex;
     flex-direction: column;
-    max-width: 520px;
+    max-width: 560px;
+    margin: 0px 40px 0px 0px;
+}
+
+.mainImageCard {
+    align-items: center;
 }
 
 .imageCard {
@@ -57,9 +108,15 @@
     width: 520px;
     height: 232px;
 }
-.subHeading{
-    display:flex;
+
+.subHeading {
+    display: flex;
     color: #008294;
     font-weight: 700;
-    font-size:20px ;
+    font-size: 20px;
+}
+
+.miniText {
+    font-size: 16px;
+    text-align: center;
 }
