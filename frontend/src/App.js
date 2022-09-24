@@ -30,7 +30,7 @@ function App() {
            <Route exact path = '/'>
             <Home />
           </Route>
-          <Route  path="/signup">
+          <Route exact path="/signup">
             <SignupFormPage />
           </Route>
           <Route path='/groups/:groupId/events/new'>
@@ -57,9 +57,7 @@ function App() {
           <Route path="/events">
             <Events />
           </Route>
-
         </Switch>
-
       )}
     </>
   );

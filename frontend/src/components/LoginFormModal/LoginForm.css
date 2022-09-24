@@ -1,1 +1,11 @@
 /*style login page here */
+.button-login {
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+}
+.button-login:hover{
+    color: #0098ae;
+}

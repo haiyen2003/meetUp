@@ -4,9 +4,11 @@ import handsUp from '../HomePage/HP-handsUp-logo.svg'
 import joinGroup from '../HomePage/HP-joinGroup-logo.svg'
 import ticket from '../HomePage/ticket.svg'
 import { Redirect, Link, NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 export default function HomePage() {
+    const history = useHistory();
     return (
         <div className={style.mainDiv}>
             <div className={style.container}>
@@ -49,6 +51,11 @@ export default function HomePage() {
                             <div className={style.subHeading}>Start a group</div></Link>
                         <div className={style.miniText}>You don’t have to be an expert to gather people together and explore shared interests.</div>
                     </div>
+                </div>
+                <div>
+                    <button onClick={()=>history.push("/signup")} className = {style.button} to='/signup'>
+                        Join Feastup
+                    </button>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@
 .container {
     display: flex;
     margin: auto;
-    padding: 50px 0px 0px 0px;
+    padding: 150px 0px 0px 0px;
     flex-direction: column;
     align-items: center;
     max-width: 1120px;
@@ -46,7 +46,7 @@
 .bottomDiv {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     flex-direction: row;
     max-width: 1120px;
     padding: 60px;
@@ -122,11 +122,27 @@
     font-size: 16px;
     text-align: center;
 }
-.link{
-    text-decoration-line: none;
+
+.link {
+    text-decoration: none;
+    border: none;
 }
 
+.link:hover {
+    border-bottom: 1px solid #008294;
+}
 
-.link:hover{
-  border-bottom: 1px #008294;
+.button {
+    display: inline-block;
+    background-color: #008294;
+    color: white;
+    border-radius: 10px;
+    border: #008294;
+    text-align: center;
+    font-size: 15px;
+    padding: 8px 16px 8px 16px;
+}
+
+.button:hover {
+    background-color: #0098ae;
 }
