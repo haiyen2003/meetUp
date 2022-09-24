@@ -3,6 +3,7 @@ import mainImage from '../HomePage/HP-online-logo.svg'
 import handsUp from '../HomePage/HP-handsUp-logo.svg'
 import joinGroup from '../HomePage/HP-joinGroup-logo.svg'
 import ticket from '../HomePage/ticket.svg'
+import { Redirect, Link, NavLink } from 'react-router-dom';
 
 
 export default function HomePage() {
@@ -26,24 +27,27 @@ export default function HomePage() {
                 </div>
                 <div className={style.bottomDiv}>
                     <div className={style.groups}>
-                        <div className = {style.subImageCard}>
-                            <img className = {style.subImageCardleft} src = {handsUp}/>
+                        <div className={style.subImageCard}>
+                            <img className={style.subImageCardleft} src={handsUp} />
                         </div>
-                        <div className={style.subHeading}>Join a group</div>
-                        <div className = {style.miniText}>Do what you love, meet others who love it, find your community. The rest is history!</div></div>
+                        <Link className={style.link} to='/groups'>
+                            <div className={style.subHeading}>Join a group</div></Link>
+                        <div className={style.miniText}>Do what you love, meet others who love it, find your community. The rest is history!</div></div>
                     <div className={style.events}>
-                        <div className = {style.subImageCard}>
-                            <img className = {style.subImageCardMiddle} src = {ticket}/>
+                        <div className={style.subImageCard}>
+                            <img className={style.subImageCardMiddle} src={ticket} />
                         </div>
-                        <div className={style.subHeading}>Find an event</div>
-                        <div  className = {style.miniText}>Events are happening on just about any topic you can think of, from online gaming and photography to yoga and hiking.</div>
+                        <Link className={style.link} to='/events'>
+                            <div className={style.subHeading}>Find an event</div></Link>
+                        <div className={style.miniText}>Events are happening on just about any topic you can think of, from online gaming and photography to yoga and hiking.</div>
                     </div>
                     <div className={style.createGroup}>
-                        <div  className = {style.subImageCard}>
-                        <img className = {style.subImageCardRight} src = {joinGroup}/>
+                        <div className={style.subImageCard}>
+                            <img className={style.subImageCardRight} src={joinGroup} />
                         </div>
-                        <div className={style.subHeading}>Start a group</div>
-                        <div  className = {style.miniText}>You don’t have to be an expert to gather people together and explore shared interests.</div>
+                        <Link className={style.link} to='/groups/new'>
+                            <div className={style.subHeading}>Start a group</div></Link>
+                        <div className={style.miniText}>You don’t have to be an expert to gather people together and explore shared interests.</div>
                     </div>
                 </div>
             </div>
