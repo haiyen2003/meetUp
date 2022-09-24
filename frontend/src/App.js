@@ -27,37 +27,39 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route exact path = '/'>
+           <Route exact path = '/'>
             <Home />
           </Route>
-          <Route exact path="/signup">
+          <Route  path="/signup">
             <SignupFormPage />
           </Route>
           <Route path='/groups/:groupId/events/new'>
             <CreateEventForm />
           </Route>
-          <Route exact path="/events/:eventId/edit">
+          <Route  path="/events/:eventId/edit">
             <EditEventForm />
           </Route>
-          <Route exact path="/events/:eventId">
+          <Route  path="/events/:eventId">
             <EventDetails />
           </Route>
-          <Route exact path='/groups/:groupId/edit'>
+          <Route  path='/groups/:groupId/edit'>
             <EditGroupForm />
           </Route>
-          <Route exact path='/groups/new'>
+          <Route  path='/groups/new'>
             <CreateGroupForm />
           </Route>
-          <Route exact path="/groups/:groupId">
+          <Route  path="/groups/:groupId">
             <GroupDetails />
           </Route>
-          <Route exact path="/groups">
+          <Route  path="/groups">
             <Groups />
           </Route>
           <Route path="/events">
             <Events />
           </Route>
+
         </Switch>
+
       )}
     </>
   );

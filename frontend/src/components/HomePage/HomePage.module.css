@@ -1,0 +1,65 @@
+.mainDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 80%;
+    align-items: center;
+}
+
+.topDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.bottomDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    max-width: 1040px;
+}
+
+.groups {
+    display: flex;
+    padding-right: 20px;
+    flex-direction: column;
+}
+
+.events {
+    display: flex;
+    padding-right: 20px;
+    flex-direction: column;
+}
+
+.createGroup {
+    display: flex;
+    padding-right: 20px;
+    flex-direction: column;
+}
+
+.mainMessage {
+    display: flex;
+    padding-right: 40px
+}
+
+.mainImage {
+    display: flex;
+}
+
+.leftMessage {
+    display: flex;
+    flex-direction: column;
+    max-width: 520px;
+}
+
+.imageCard {
+    display: flex;
+    width: 520px;
+    height: 232px;
+}
+.subHeading{
+    display:flex;
+    color: #008294;
+    font-weight: 700;
+    font-size:20px ;
+}
