@@ -47,9 +47,9 @@ function Events() {
                             <div className='group-right'>
                                 <div className='group-about'>{newDay}, {newDate} {newMonth} · {newTime[0]}</div>
                                 <NavLink className='group-name' to={`/events/${event.id}`}>{event.name}</NavLink>
-                                <div className='group-name-city'>{event.Group.name} · {event.Venue.city}</div>
+                                <div className='group-name-city'>{event.Group.name} · {event.Venue.city}, {event.Venue.state}</div>
                                 <div className='group-attendee'>{event.numAttending} {event.numAttending === 1 ? "attendee" : "attendees"}</div>
-                                <br />
+
                             </div>
                         </div>
                     )

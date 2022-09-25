@@ -54,7 +54,7 @@
     display: flex;
     text-decoration: none;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
     color: black;
 
 }
@@ -68,9 +68,7 @@
 .group-about {
     display: flex;
     color: grey;
-    font-size: 14px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    font-size: 18px;
 }
 
 .group-attendee {
