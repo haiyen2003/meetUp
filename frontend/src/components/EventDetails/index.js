@@ -47,7 +47,7 @@ export default function EventDetails() {
             { }
             <div className='main-container'>
                 <div className='event-top-container'>
-                    <div>{thisEvent.startDate}</div>
+                    <div className='public_'>{thisEvent.startDate}</div>
                     {/* <div>{newDay}, {newDate} {newMonth} · {newTime[0]}</div> */}
                     <div className='name'>{thisEvent.name}</div>
                 </div>
@@ -58,13 +58,13 @@ export default function EventDetails() {
                     <div className='right-top-container'>
                         <div className='event-private-name'>
                             <div className='name'>{thisEvent.Group.name}</div>
-                            <div className='public'> {thisEvent.Group.private ? "Private" : "Public"} Group</div>
+                            <div className='public_'> {thisEvent.Group.private ? "Private" : "Public"} Group</div>
                         </div>
                         <br />
                         <div className='event-start-end'>
                             <div>{thisEvent.startDate} to {thisEvent.endDate}
                             </div>
-                            <div>{thisEvent.type} event</div>
+                            <div className = 'event-private'>{thisEvent.type} event</div>
                         </div>
 
                     </div>
@@ -84,9 +84,9 @@ export default function EventDetails() {
                 </div>
                 <div className='bottom-bar'>
                     <div className='about'>About: {thisEvent.description}</div>
-                    <div>Capacity: {thisEvent.capacity}</div>
-                    <div>Price: ${thisEvent.price}</div>
-                    <div>Venue: {thisEvent.Venue.address}, {thisEvent.Venue.city}, {thisEvent.Venue.state}</div>
+                    <div className='about'>Capacity: {thisEvent.capacity}</div>
+                    <div className='about'>Price: ${thisEvent.price}</div>
+                    <div className='about'>Venue: {thisEvent.Venue.address}, {thisEvent.Venue.city}, {thisEvent.Venue.state}</div>
                 </div>
             </div>
         </>

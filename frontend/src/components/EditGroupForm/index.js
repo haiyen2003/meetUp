@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { editGroupThunk } from '../../store/group';
 import { fetchOneGroup } from '../../store/group';
 import { useParams } from 'react-router-dom';
+import '../EditGroupForm/EditGroup.css';
 //extract params to find groupId - normalize data in Redux;
 
 export default function EditGroupForm() {
@@ -62,64 +63,88 @@ export default function EditGroupForm() {
     if (!group) return null;
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <ul>
+        <div className='form'>
+            <div className = 'title-div'>
+               <div className = 'top-title'>Edit your group</div>
+                <div className = 'name-details'>{group.name}</div>
+            </div>
+            <form  onSubmit={handleSubmit}>
+                <ul className='error'>
                     {errors.map((error, idx) => <li key={idx}>{error}</li>)}
                 </ul>
-                <div>
-                    <label>Name</label>
+                <div className = 'top-field'>
+                    <div className = 'field'>
+                    <label className = 'label'>Name</label>
                     <input
+                    className='input-box'
                         type='text'
                         value={name}
                         onChange={e => setName(e.target.value)}
                         required
                     />
-                    <label>About</label>
+                    </div>
+                    <div className = 'field'>
+                    <label className = 'label'>About</label>
                     <input
+                      className='input-box'
                         type='text'
                         value={about}
                         onChange={e => setAbout(e.target.value)}
                         required
                     />
-                    <label>Type</label>
+                    </div>
+                    <div className = 'field'>
+                    <label className = 'label'>Type</label>
                     <select
+
                         value={type}
                         onChange={e => setType(e.target.value)}
                         required
                     >
-                        <option value={'In person'}>In person</option>
-                        <option value={'Online'}>Online</option>
+                        <option   className='input-box' value={'In person'}>In person</option>
+                        <option    className='input-box' value={'Online'}>Online</option>
                     </select>
-                    <label>City</label>
+                    </div>
+                    <div className = 'field'>
+                    <label className = 'label'>City</label>
                     <input
+                      className='input-box'
                         type='text'
                         value={city}
                         onChange={e => setCity(e.target.value)}
                         required
                     />
-                    <label>State</label>
+                    </div>
+                    <div className = 'field'>
+                    <label className = 'label'>State</label>
                     <input
+                      className='input-box'
                         type='text'
                         value={state}
                         onChange={e => setState(e.target.value)}
                         required
                     >
                     </input>
-                    <label>Group Privacy</label>
+                    </div>
+                    <div className = 'field'>
+                    <label className = 'label'>Group Privacy</label>
                     <select
+
                         type='text'
                         value={isPrivate}
                         onChange={e => setPrivate(e.target.value)}
                         required
                     >
-                        <option value={true}>Private</option>
-                        <option value={false}>Public</option>
+                        <option   className='input-box' value={true}>Private</option>
+                        <option   className='input-box' value={false}>Public</option>
                     </select>
+                    </div>
                 </div>
-                <button type='submit'>
+                <button className = 'button' type='submit'>
                     Submit
                 </button>
             </form>
+            </div>
         </>
     )
 }
