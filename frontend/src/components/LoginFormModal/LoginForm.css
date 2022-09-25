@@ -7,6 +7,88 @@
     font-weight: 600;
     cursor: pointer;
 }
-.button-login:hover{
+
+.button-login:hover {
     color: #0098ae;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: auto;
+    align-items: center;
+    align-content: center;
+    border-radius: 15px;
+    overflow: hidden;
+    perspective: 1px;
+}
+
+.label-login-form {
+    font-size: 18px;
+    padding-bottom: 5px;
+    padding-top: 20px;
+}
+
+.top-div-login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-box-form {
+    width: 400px;
+    border-color: rgba(34, 34, 34, 0.1);
+    border-radius: 10px;
+    height: 20px;
+    padding: 10px;
+    /* color: grey; */
+    font-size: 16px;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-login-form {
+    width: 424px;
+    height: 3rem;
+    background-color: #f65858;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 20px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button-login-form:hover {
+    background-color: #f77070;
+}
+
+.Login-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.login-button-container {
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.signup-link {
+    text-decoration: none;
+    color: #f65858;
+    font-size: 16px;
+}
+
+.Signup-title {
+    font-size: 16px;
 }

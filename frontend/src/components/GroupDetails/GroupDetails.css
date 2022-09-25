@@ -17,6 +17,7 @@
 .left-top-container {
     display: flex;
     width: 600px;
+    object-fit: cover;
 }
 
 .big-image {
@@ -100,7 +101,8 @@
 .button-container {
     padding-left: 10px;
 }
-.notice{
+
+.notice {
     font-size: 16px;
     font-style: italic;
 }

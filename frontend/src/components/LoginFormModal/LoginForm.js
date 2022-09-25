@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import './LoginForm.css';
 
 function LoginForm() {
@@ -24,30 +24,40 @@ function LoginForm() {
     }
     //style modal from here
     return (
-        <form onSubmit={handleSubmit}>
-            <ul>
-                {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-            </ul>
-            <label>
-                Username or Email
+        <div className='login-form'>
+            <div className='top-div-login-form'>
+                <div className='Login-title'>Log in</div>
+                <div className='Signup-title'>Not a member yet? <NavLink className='signup-link' to="/signup">Sign up</NavLink> </div>
+            </div>
+            <form className='login-field' onSubmit={handleSubmit}>
+                <ul>
+                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+                </ul>
+                <label className='label-login-form'>
+                    Username or Email  </label>
                 <input
+                    className='input-box-form'
                     type="text"
                     value={credential}
                     onChange={(e) => setCredential(e.target.value)}
                     required
                 />
-            </label>
-            <label>
-                Password
+
+                <label className='label-login-form'>Password</label>
+
                 <input
+                    className='input-box-form'
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-            </label>
-            <button type="submit">Log In</button>
-        </form>
+
+                <div className='login-button-container'>
+                    <button className='button-login-form' type="submit">Log In</button>
+                </div>
+            </form>
+        </div >
     );
 }
 
