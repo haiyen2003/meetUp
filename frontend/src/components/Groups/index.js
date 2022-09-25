@@ -38,14 +38,13 @@ function Groups() {
                             <NavLink className='group-name' to={`/groups/${group.id}`}>{group.name}</NavLink>
                             <div className='group-city-state'>{group.city.toUpperCase()}, {group.state.toUpperCase()}</div>
                             <div className='group-organizer'> Organized by: {Object(Object(groups[0])['Organizer'])["firstName"]}</div>
-
+                            {/* <div className = 'about-container'> */}
                             <div className='group-about'>{group.about}</div>
-
+                            {/* </div> */}
                             <div className='group-member-pulic'>
                                 {group.numMembers} {group.numMembers === 1 ? "member" : "members"} · {group.private ? "Private" : "Public"}
                             </div>
                         </div>
-                        <br />
                     </div>
                 ))}
 

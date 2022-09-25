@@ -51,9 +51,11 @@
 .bottom-left-container {
     display: flex;
     flex-direction: column;
-    width: 600px;
+    width: 580px;
     font-size: 20px;
-    font-weight: 500;
+    object-fit: cover;
+    text-align: start;
+    padding-right: 20px;
 }
 
 .bottom-right-container {
@@ -83,10 +85,10 @@
 
 .button {
     display: inline-block;
-    background-color: #f357ad;
+    background-color: #f65858;
     color: white;
-    border-radius: 5px;
-    border: #f357ad;
+    border-radius: 8px;
+    border: none;
     text-align: center;
     font-size: 15px;
     font-weight: 600;
@@ -95,7 +97,7 @@
 }
 
 .button:hover {
-    background-color: #f772bb;
+    background-color: #f77070;
 }
 
 .button-container {
