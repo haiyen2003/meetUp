@@ -45,7 +45,7 @@ const createGroup = (group) => {
 }
 
 export const createGroupThunk = payload => async (dispatch) => {
-    const { name, about, type, city, state, isPrivate } = payload;
+    const { name, about, type, city, state, isPrivate, previewImage } = payload;
     const res = await csrfFetch(`/api/groups`, {
         method: 'POST',
         body: JSON.stringify({
@@ -55,6 +55,7 @@ export const createGroupThunk = payload => async (dispatch) => {
             city,
             state,
             private: isPrivate,
+            previewImage
         }),
         // headers: { 'Content-Type': 'application/json' },
     })

@@ -16,6 +16,7 @@ function CreateGroupForm() {
     const [type, setType] = useState('In person');
     const [city, setCity] = useState('');
     const [state, setState] = useState('CA');
+    const [previewImage, setPreviewImage] = useState('');
     const [isPrivate, setPrivate] = useState(false);
     const [errors, setErrors] = useState([]);
     const [submitted, setSubmitted] = useState(false);
@@ -38,7 +39,8 @@ function CreateGroupForm() {
             type: type,
             isPrivate,
             city: city,
-            state: state
+            state: state,
+            previewImage: previewImage
         };
         return dispatch(createGroupThunk(thisNewGroupPayload))
             .then(() => {
@@ -135,6 +137,17 @@ function CreateGroupForm() {
                                 <option className='dropdown-option' value={true}>Private</option>
                                 <option className='dropdown-option' value={false}>Public</option>
                             </select>
+                        </div>
+                        <div className='field'>
+                            <label className='label'> {`Group Image URL (optional)`}</label>
+                            <input
+                                className='input-box'
+                                placeholder='State'
+                                type='text'
+                                value={previewImage}
+                                onChange={e => setPreviewImage(e.target.value)}
+                            >
+                            </input>
                         </div>
                     </div>
                     <button className='edit-group-button' type='submit'>
