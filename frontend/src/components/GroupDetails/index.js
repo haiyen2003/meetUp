@@ -13,8 +13,12 @@ export default function GroupDetails() {
     const { groupId } = useParams();
     const history = useHistory();
     const test = useSelector((state) => state.groups);
-    const thisGroup = test[groupId];
     const thisUser = useSelector(state => state.session.user);
+    let thisGroup = null
+    useEffect(() => {
+        dispatch(fetchOneGroup(groupId))
+        thisGroup = test[groupId];
+    }, [dispatch]);
 
     const isOwner = thisUser?.id === thisGroup?.organizerId;
     const routeChange = () => {
@@ -25,9 +29,7 @@ export default function GroupDetails() {
         let path = `/groups/${groupId}/events/new`
         history.push(path);
     }
-    useEffect(() => {
-        dispatch(fetchOneGroup(groupId))
-    }, [dispatch]);
+
 
     const handleDelete = async groupId => {
         const thisDelete = await dispatch(deleteGroupThunk(groupId));
@@ -63,9 +65,9 @@ export default function GroupDetails() {
                         {isOwner &&
                             <button className='button' onClick={routeChange2}>Create Event</button>}
                     </div>
-                    <div className = 'notice'>
+                    <div className='notice'>
                         {!isOwner &&
-                        <p>You are not an organizer of this group</p>}
+                            <p>You are not an organizer of this group</p>}
                     </div>
 
                 </div>

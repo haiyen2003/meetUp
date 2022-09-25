@@ -301,7 +301,7 @@ export default function EditGroupForm() {
                             </select>
                         </div>
                     </div>
-                    <button className='button' type='submit'>
+                    <button className='edit-group-button' type='submit'>
                         Submit
                     </button>
                 </form>

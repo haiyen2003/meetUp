@@ -18,13 +18,6 @@ function Groups() {
 
     useEffect(() => {
         dispatch(fetchGroups())
-        // .then((res) => {
-        //     console.log(res, 'RES -----');
-        // })
-        // .catch((res) => {
-        //     const data = res.json()
-        //     if (data && data.errors) console.log(data.errors, '----- ERROR');
-        // })
     }, [dispatch]);
 
     if (test === undefined) return null;

@@ -27,7 +27,7 @@
 
 .input-box {
     width: 600px;
-
+    border-color: rgba(34, 34, 34, 0.1);
     border-radius: 10px;
     height: 20px;
     padding: 10px;
@@ -38,7 +38,7 @@
 
 select {
     width: 600px;
-
+    border-color: rgba(34, 34, 34, 0.1);
     padding: 10px;
     border-radius: 10px;
     color: grey;
@@ -64,4 +64,15 @@ select {
 
 .dropdown-option{
     width: 624px;
+    border-color: rgba(34, 34, 34, 0.1);
+}
+.edit-group-button{
+    width: 624px;
+    height: 3rem;
+    background-color: #f65858;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
 }
