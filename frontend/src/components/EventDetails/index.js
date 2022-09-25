@@ -21,8 +21,25 @@ export default function EventDetails() {
         let path = `/events/${eventId}/edit`
         history.push(path);
     }
+
+    let properFinalDay = '';
+    if (thisEvent) {
+        let date = thisEvent.startDate;
+        let properDate = new Date(date);
+        let day = properDate.getDay();
+        let month = properDate.getMonth();
+        let time = thisEvent.startDate.split('T');
+        let newTime = time[1].split('.');
+        let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let dayArray = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+        let newDay = dayArray[day];
+        let newMonth = monthArray[month];
+        let newDate = properDate.getDate();
+        properFinalDay = `${newDay}, ${newDate} ${newMonth} · ${newTime[0]}`
+    }
     useEffect(() => {
-        dispatch(fetchOneEvent(eventId))
+        dispatch(fetchOneEvent(eventId));
+
     }, [dispatch]);
 
     const handleDelete = async eventId => {
@@ -30,25 +47,14 @@ export default function EventDetails() {
         history.push(`/events`);
     }
 
-    // let date = thisEvent.startDate;
-    // let properDate = new Date(date);
-    // let day = properDate.getDay();
-    // let month = properDate.getMonth();
-    // let time = thisEvent.startDate.split('T');
-    // let newTime = time[1].split('.');
-    // let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // let dayArray = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
-    // let newDay = dayArray[day];
-    // let newMonth = monthArray[month];
-    // let newDate = properDate.getDate();
+
     if (!thisEvent) return null;
     return (
         <>
-            { }
+            {/* {showProperFullDate(thisEvent.startDate)} */}
             <div className='main-container'>
                 <div className='event-top-container'>
-                    <div className='public_'>{thisEvent.startDate}</div>
-                    {/* <div>{newDay}, {newDate} {newMonth} · {newTime[0]}</div> */}
+                    <div className='public_'>{<div>{properFinalDay}</div>}</div>
                     <div className='name'>{thisEvent.name}</div>
                 </div>
                 <div className='top-container_'>
@@ -64,7 +70,7 @@ export default function EventDetails() {
                         <div className='event-start-end'>
                             <div>{thisEvent.startDate} to {thisEvent.endDate}
                             </div>
-                            <div className = 'event-private'>{thisEvent.type} event</div>
+                            <div className='event-private'>{thisEvent.type} event</div>
                         </div>
 
                     </div>

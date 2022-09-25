@@ -22,6 +22,7 @@ function LoginForm() {
                 };
             });
     }
+    //style modal from here
     return (
         <form onSubmit={handleSubmit}>
             <ul>

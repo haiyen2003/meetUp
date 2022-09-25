@@ -80,9 +80,11 @@
     border-bottom: 1px solid black;
 
 }
+
 .logged-out {
     border-bottom: none;
 }
+
 .profile-button {
     display: flex;
     border-radius: 50%;
@@ -95,4 +97,23 @@
     color: white;
     align-content: center;
     font-weight: bold;
+}
+
+.right-navbar {
+    display: flex;
+    flex-direction: row;
+}
+
+.new-group {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.new-group:hover {
+    color: #0098ae;
 }
