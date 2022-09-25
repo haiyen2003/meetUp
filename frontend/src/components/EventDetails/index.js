@@ -30,25 +30,64 @@ export default function EventDetails() {
         history.push(`/events`);
     }
 
+    // let date = thisEvent.startDate;
+    // let properDate = new Date(date);
+    // let day = properDate.getDay();
+    // let month = properDate.getMonth();
+    // let time = thisEvent.startDate.split('T');
+    // let newTime = time[1].split('.');
+    // let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // let dayArray = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+    // let newDay = dayArray[day];
+    // let newMonth = monthArray[month];
+    // let newDate = properDate.getDate();
     if (!thisEvent) return null;
     return (
         <>
-            This is Event Details Page;
-            <div>{thisEvent.name}</div>
-            <div>{thisEvent.description}</div>
-            <div>Capacity: {thisEvent.capacity}</div>
-            <div>Type: {thisEvent.type}</div>
-            <div>Price: {thisEvent.price}</div>
-            <div>VenueId: {thisEvent.venueId}</div>
-            <div>Start Date: {thisEvent.startDate}</div>
-            <div>End Date: {thisEvent.endDate}</div>
-            <div>
-                {isOwner &&
-                    <button onClick={() => handleDelete(eventId)}>Delete Event</button>}
-            </div>
-            <div>
-                {isOwner &&
-                    <button onClick={routeChange}>Edit Event</button>}
+            { }
+            <div className='main-container'>
+                <div className='event-top-container'>
+                    <div>{thisEvent.startDate}</div>
+                    {/* <div>{newDay}, {newDate} {newMonth} · {newTime[0]}</div> */}
+                    <div className='name'>{thisEvent.name}</div>
+                </div>
+                <div className='top-container_'>
+                    <div className='left-top-container'>
+                        <img className='big-image' src={thisEvent.EventImages[0].url} ></img>
+                    </div>
+                    <div className='right-top-container'>
+                        <div className='event-private-name'>
+                            <div className='name'>{thisEvent.Group.name}</div>
+                            <div className='public'> {thisEvent.Group.private ? "Private" : "Public"} Group</div>
+                        </div>
+                        <br />
+                        <div className='event-start-end'>
+                            <div>{thisEvent.startDate} to {thisEvent.endDate}
+                            </div>
+                            <div>{thisEvent.type} event</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className='middle-container'>
+                    <div className='button-container'>
+                        {!isOwner &&
+                            <p className='notice'>You are not an organizer of this event</p>}
+                        {isOwner &&
+                            <button className='button' onClick={() => handleDelete(eventId)}>Delete Event</button>}
+
+                    </div>
+                    <div className='button-container'>
+                        {isOwner &&
+                            <button className='button' onClick={routeChange}>Edit Event</button>}
+                    </div>
+                </div>
+                <div className='bottom-bar'>
+                    <div className='about'>About: {thisEvent.description}</div>
+                    <div>Capacity: {thisEvent.capacity}</div>
+                    <div>Price: ${thisEvent.price}</div>
+                    <div>Venue: {thisEvent.Venue.address}, {thisEvent.Venue.city}, {thisEvent.Venue.state}</div>
+                </div>
             </div>
         </>
     )

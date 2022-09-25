@@ -160,6 +160,7 @@ router.get('/:eventId', async (req, res, next) => {
             [sequelize.fn('COUNT', sequelize.col('id')), 'numAttending']
         ]
     });
+  
     thisEvent.dataValues.numAttending = attendant[0].dataValues.numAttending;
     return res.json(
         thisEvent

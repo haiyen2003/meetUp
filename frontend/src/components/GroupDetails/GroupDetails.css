@@ -10,7 +10,6 @@
 .top-container_ {
     display: flex;
     flex-direction: row;
-    border-bottom: 0.5px solid grey;
     padding-bottom: 20px;
     padding-top: 10px;
 }
@@ -39,6 +38,7 @@
     height: 66px;
     padding: 0px 0px 0px 500px;
     border-bottom: 0.5px solid grey;
+    border-top: 0.5px solid grey;
 }
 
 .bottom-container {
