@@ -84,8 +84,8 @@ export default function EventDetails() {
 
                     </div>
                     <div className='button-container'>
-                        {isOwner &&
-                            <button className='button' onClick={routeChange}>Edit Event</button>}
+                        {/* {isOwner &&
+                            <button className='button' onClick={routeChange}>Edit Event</button>} */}
                     </div>
                 </div>
                 <div className='bottom-bar'>
