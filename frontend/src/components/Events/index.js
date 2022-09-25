@@ -21,18 +21,24 @@ function Events() {
     if (!data) return null;
     return (
         <>
-            <div>
+            <div className='map-container'>
+                <div className='top-container'>
+                    <NavLink className="top-link " to={`/groups`}>Groups</NavLink>
+                    <NavLink className='top-link top-link-underlined' to={`/events`}>Events</NavLink>
+                </div>
                 {events.map((event) => (
-                    <div>
-                        <NavLink to={`/events/${event.id}`}>{event.name}</NavLink>
-                        <div>{event.description}</div>
-                        <div>Capacity: {event.capacity}</div>
-                        <div>Type: {event.type}</div>
-                        <div>Price: {event.price}</div>
-                        <div>VenueId: {event.venueId}</div>
-                        <div>Start Date: {event.startDate}</div>
-                        <div>End Date: {event.endDate}</div>
-                        <br />
+                    <div className='group-card'>
+                        <div className='group-left'>
+                            <img className='image' src={event.previewImage} alt='group-img'></img>
+                        </div>
+                        <div className='group-right'>
+                            <div>Start Date: {event.startDate}</div>
+                            <NavLink className='group-name' to={`/events/${event.id}`}>{event.name}</NavLink>
+                            <div className='group-city-state'>{event.Group.name} · {event.Venue.city}</div>
+                            <div className='group-about'>{event.description}</div>
+                            <div className='group-member-pulic'>{event.numAttending} {event.numAttending === 1 ? "attendee" : "attendees"}</div>
+                            <br />
+                        </div>
                     </div>
                 ))}
             </div>

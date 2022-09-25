@@ -14,37 +14,37 @@ module.exports = {
      return queryInterface.bulkInsert('EventImages', [
       {
         eventId: 1,
-        url: 'www.event1-img1.com',
+        url: 'https://st2.depositphotos.com/2444995/5628/i/450/depositphotos_56283159-stock-photo-fish-tacoes-on-wooden-background.jpg',
         preview: true
       },
       {
         eventId: 1,
-        url: 'www.event1-img2.com',
+        url: 'https://images.squarespace-cdn.com/content/v1/52d3fafee4b03c7eaedee15f/c523fb53-2812-4cf3-8ef6-9b8036d04914/after-7576.jpg',
         preview: true
       },
       {
         eventId: 2,
-        url: 'www.event2-img1.com',
+        url: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/pasta-salad-horizontal-jpg-1522265695.jpg',
         preview: false
       },
       {
         eventId: 2,
-        url: 'www.event2-img2.com',
+        url: 'https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_25/1581912/ribeye-salad-today-061920-tease.jpg',
         preview: true
       },
       {
         eventId: 3,
-        url: 'www.event3-img1.com',
+        url: 'https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_25/1581912/ribeye-salad-today-061920-tease.jpg',
         preview: true
       },
       {
         eventId: 4,
-        url: 'www.event4-img1.com',
+        url: 'https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_25/1581912/ribeye-salad-today-061920-tease.jpg',
         preview: true
       },
       {
         eventId: 4,
-        url: 'www.event4-img2.com',
+        url: 'https://i.imgur.com/3dnih4O.jpg',
         preview: true
       },
     ], {});
