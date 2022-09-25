@@ -1,4 +1,4 @@
-.navbar {
+/* .navbar {
     display: flex;
     background-color: white;
     top: 0;
@@ -32,4 +32,67 @@
 .logged-out {
     border-bottom: none;
 
+}
+
+
+.profile-dropdown {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    z-index: 52;
+    box-shadow: 0 3px 3px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid white;
+    min-width: 200px;
+    height: 100px;
+}
+
+.dropdown-field{
+    display: flex;
+    margin-right: 50px;
+} */
+.navbar {
+    display: flex;
+    background-color: white;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030px;
+    width: 100vw;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    cursor: pointer;
+}
+
+.logo {
+    height: 50px;
+    margin-left: 40px;
+}
+
+.logged-in {
+    border-bottom: 1px solid black;
+
+}
+.logged-out {
+    border-bottom: none;
+}
+.profile-button {
+    display: flex;
+    border-radius: 50%;
+    background-color: #f65858;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    align-content: center;
+    font-weight: bold;
 }

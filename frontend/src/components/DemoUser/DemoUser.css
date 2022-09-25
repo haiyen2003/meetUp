@@ -6,6 +6,7 @@
     font-weight: 600;
     cursor: pointer;
 }
-.button-demo:hover{
+
+.button-demo:hover {
     color: #0098ae;
 }
