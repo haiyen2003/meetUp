@@ -25,6 +25,7 @@ export default function GroupDetails() {
         let path = `/groups/${groupId}/events/new`
         history.push(path);
     }
+
     useEffect(() => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch]);
@@ -37,28 +38,41 @@ export default function GroupDetails() {
     if (!thisGroup) return null;
     return (
         <>
-            <div>
-                This is Group Details Page;
-                <div>{thisGroup.name}</div>
-                <div>{thisGroup.about}</div>
-                <div>Organizer: {thisGroup.organizerId}</div>
-                <div>Type: {thisGroup.type}</div>
-                <div>Private: {thisGroup.private.toString()}</div>
-                <div>City: {thisGroup.city}</div>
-                <div>State: {thisGroup.state}</div>
-                <div>Members: {thisGroup.numMembers}</div>
-                <div>Image: {thisGroup.previewImage}</div>
-                <div>
-                    {isOwner &&
-                        <button onClick={() => handleDelete(groupId)}>Delete Group</button>}
-                </div>
-                <div>
-                    {isOwner &&
-                        <button onClick={routeChange}>Edit Group</button>}
-                </div>
-                <div>
-                    {isOwner &&
-                        <button onClick={routeChange2}>Create Event</button>}
+            <div className='main-container'>
+                <div className='top-container'>
+                    <div className='left-top-container'>
+                        <img className='image' src={thisGroup.GroupImages[0].url}></img>
+                    </div>
+                    <div className='right-top-container'>
+                        <div>{thisGroup.name}</div>
+                        <div>City: {thisGroup.city}</div>
+                        <div>State: {thisGroup.state}</div>
+                        <div>Members: {thisGroup.numMembers}</div>
+                        <div>Private: {thisGroup.private.toString()}</div>
+                    </div>
+                    <div className='middle-container'>
+                        <div class='dropdown'>
+                            {isOwner &&
+                                <button onClick={() => handleDelete(groupId)}>Delete Group</button>}
+
+                            <div>
+                                {isOwner &&
+                                    <button onClick={routeChange}>Edit Group</button>}
+                            </div>
+                            <div>
+                                {isOwner &&
+                                    <button onClick={routeChange2}>Create Event</button>}
+                            </div>
+                        </div>
+                    </div>
+                    <div className='bottom-container'>
+                        <div className='bottom-left-container'>
+                            <div>{thisGroup.about}</div>
+                        </div>
+                    </div>
+                    <div className='bottom-right-container'>
+                        <div>Organizer: {thisGroup.organizerId}</div>
+                    </div>
                 </div>
                 <br />
             </div>
