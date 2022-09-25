@@ -1,7 +1,6 @@
 .event-private-name {
     display: flex;
     flex-direction: column;
-    background-color: aliceblue;
     width: auto;
     height: auto;
     border-radius: 10px;
@@ -13,7 +12,6 @@
 .event-start-end {
     display: flex;
     flex-direction: column;
-    background-color: aliceblue;
     width: auto;
     height: auto;
     border-radius: 10px;

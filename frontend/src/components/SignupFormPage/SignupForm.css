@@ -11,3 +11,20 @@
 .button-signup:hover {
     color: #0098ae;
 }
+
+.button-signup-form {
+    width: 624px;
+    height: 3rem;
+    background-color: #f65858;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.button-signup-form {
+    background-color: #f77070;
+}

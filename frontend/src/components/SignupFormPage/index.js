@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import './SignupForm.css';
+import { NavLink } from "react-router-dom";
 
 function SignupFormPage() {
     const dispatch = useDispatch();
@@ -32,66 +33,90 @@ function SignupFormPage() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <ul>
-                {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-            </ul>
-            <label>
-                First Name
-                <input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstname(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Last Name
-                <input
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastname(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Email
-                <input
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Username
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Password
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Confirm Password
-                <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                />
-            </label>
-            <button className='button-signup' type="submit">Sign Up</button>
-        </form>
+        <>
+            <div className='form'>
+                <div className='title-div'>
+                    <div className='Login-title'>Sign up</div>
+                    <div className='Signup-title'>Already a member? <NavLink className='signup-link' to="/login">Log in</NavLink> </div>
+                </div>
+                <form onSubmit={handleSubmit}>
+                    <ul>
+                        {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+                    </ul>
+                    <div className='top-field'>
+                        <div className='field'>
+                            <label className='label'>
+                                First Name  </label>
+                            <input
+                                className='input-box'
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstname(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>
+                                Last Name  </label>
+                            <input
+                                className='input-box'
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastname(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>
+                                Email </label>
+                            <input
+                                className='input-box'
+                                type="text"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'> </label>
+                            Username
+                            <input
+                                className='input-box'
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>
+                                Password </label>
+                            <input
+                                className='input-box'
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className='field'>
+                            <label className='label'>
+                                Confirm Password </label>
+                            <input
+                                className='input-box'
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+
+                        </div>
+                    </div>
+                    <button className='button-signup-form' type="submit">Sign Up</button>
+                </form>
+            </div >
+        </>
     );
 }
 
