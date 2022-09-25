@@ -25,7 +25,6 @@ export default function GroupDetails() {
         let path = `/groups/${groupId}/events/new`
         history.push(path);
     }
-
     useEffect(() => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch]);
@@ -39,40 +38,46 @@ export default function GroupDetails() {
     return (
         <>
             <div className='main-container'>
-                <div className='top-container'>
+                <div className='top-container_'>
                     <div className='left-top-container'>
-                        <img className='image' src={thisGroup.GroupImages[0].url}></img>
+                        <img className='big-image' src={thisGroup.GroupImages[0].url}></img>
                     </div>
                     <div className='right-top-container'>
-                        <div>{thisGroup.name}</div>
-                        <div>City: {thisGroup.city}</div>
-                        <div>State: {thisGroup.state}</div>
-                        <div>Members: {thisGroup.numMembers}</div>
-                        <div>Private: {thisGroup.private.toString()}</div>
-                    </div>
-                    <div className='middle-container'>
-                        <div class='dropdown'>
-                            {isOwner &&
-                                <button onClick={() => handleDelete(groupId)}>Delete Group</button>}
+                        <div className='name'>{thisGroup.name}</div>
+                        <div className='location'>🌍 {thisGroup.city}, {thisGroup.state}</div>
+                        <div className='members-public'>👥 {thisGroup.numMembers} {thisGroup.numMembers === 1 ? "member" : "members"} · {thisGroup.private ? "Private" : "Public"} </div>
 
-                            <div>
-                                {isOwner &&
-                                    <button onClick={routeChange}>Edit Group</button>}
-                            </div>
-                            <div>
-                                {isOwner &&
-                                    <button onClick={routeChange2}>Create Event</button>}
-                            </div>
+                        <div className='organizer'>👤 Organized by {thisGroup.Organizer.firstName}</div>
+                    </div>
+                </div>
+                <div className='middle-container'>
+                    <div className='button-container'>
+                        {isOwner &&
+                            <button className='button' onClick={() => handleDelete(groupId)}>Delete Group</button>}
+                    </div>
+                    <div className='button-container'>
+                        {isOwner &&
+                            <button className='button' onClick={routeChange}>Edit Group</button>}
+                    </div>
+                    <div className='button-container'>
+                        {isOwner &&
+                            <button className='button' onClick={routeChange2}>Create Event</button>}
+                    </div>
+                    <div className = 'notice'>
+                        {!isOwner &&
+                        <p>You are not an organizer of this group</p>}
+                    </div>
+
+                </div>
+                <div className='bottom-container'>
+                    <div className='bottom-left-container'>
+                        <div class='about'>
+                            What we're about
+                            <br />
+                            {thisGroup.about}
                         </div>
                     </div>
-                    <div className='bottom-container'>
-                        <div className='bottom-left-container'>
-                            <div>{thisGroup.about}</div>
-                        </div>
-                    </div>
-                    <div className='bottom-right-container'>
-                        <div>Organizer: {thisGroup.organizerId}</div>
-                    </div>
+                    <div className='bottom-right-container'>Organizer: {thisGroup.Organizer.firstName} {thisGroup.Organizer.lastName}</div>
                 </div>
                 <br />
             </div>
