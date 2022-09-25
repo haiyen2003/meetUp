@@ -59,12 +59,10 @@
 
 }
 
-.group-city-state {
+.group-name-city {
     display: flex;
     color: grey;
     font-size: 14px;
-    font-weight: bold;
-
 }
 
 .group-about {
@@ -75,10 +73,11 @@
     margin-bottom: 15px;
 }
 
-.group-member-pulic {
+.group-attendee {
     display: flex;
     color: grey;
     font-size: 14px;
+    padding-top: 25px;
 }
 
 .group-organizer {

@@ -26,21 +26,34 @@ function Events() {
                     <NavLink className="top-link " to={`/groups`}>Groups</NavLink>
                     <NavLink className='top-link top-link-underlined' to={`/events`}>Events</NavLink>
                 </div>
-                {events.map((event) => (
-                    <div className='group-card'>
-                        <div className='group-left'>
-                            <img className='image' src={event.previewImage} alt='group-img'></img>
+                {events.map((event) => {
+                    let date = event.startDate;
+                    let properDate = new Date(date);
+                    let day = properDate.getDay();
+                    let month = properDate.getMonth();
+                    let time = event.startDate.split('T');
+                    let newTime = time[1].split('.');
+                    let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    let dayArray = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
+                    let newDay = dayArray[day];
+                    let newMonth = monthArray[month];
+                    let newDate = properDate.getDate();
+
+                    return (
+                        <div className='group-card'>
+                            <div className='group-left'>
+                                <img className='image' src={event.previewImage} alt='group-img'></img>
+                            </div>
+                            <div className='group-right'>
+                                <div className='group-about'>{newDay}, {newDate} {newMonth} · {newTime[0]}</div>
+                                <NavLink className='group-name' to={`/events/${event.id}`}>{event.name}</NavLink>
+                                <div className='group-name-city'>{event.Group.name} · {event.Venue.city}</div>
+                                <div className='group-attendee'>{event.numAttending} {event.numAttending === 1 ? "attendee" : "attendees"}</div>
+                                <br />
+                            </div>
                         </div>
-                        <div className='group-right'>
-                            <div>Start Date: {event.startDate}</div>
-                            <NavLink className='group-name' to={`/events/${event.id}`}>{event.name}</NavLink>
-                            <div className='group-city-state'>{event.Group.name} · {event.Venue.city}</div>
-                            <div className='group-about'>{event.description}</div>
-                            <div className='group-member-pulic'>{event.numAttending} {event.numAttending === 1 ? "attendee" : "attendees"}</div>
-                            <br />
-                        </div>
-                    </div>
-                ))}
+                    )
+                })}
             </div>
         </>
     )
