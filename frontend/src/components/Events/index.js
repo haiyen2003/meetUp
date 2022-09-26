@@ -41,12 +41,12 @@ function Events() {
                     let newDate = properDate.getDate();
 
                     return (
-                        <div className='group-card'>
+                        <div className='event-card'>
                             <div className='group-left'>
                                 <img className='image' src={event.previewImage} alt='group-img'></img>
                             </div>
                             <div className='group-right'>
-                                <div className='group-about'>{newDay}, {newDate} {newMonth} · {newTime[0]}</div>
+                                <div className='event-about'>{newDay}, {newDate} {newMonth} · {newTime[0]}</div>
                                 <NavLink className='group-name' to={`/events/${event.id}`}>{event.name}</NavLink>
                                 <div className='group-name-city'>{event.Group.name} · {event.Venue.city}, {event.Venue.state}</div>
                                 <div className='group-attendee'>{event.numAttending} {event.numAttending === 1 ? "attendee" : "attendees"}</div>

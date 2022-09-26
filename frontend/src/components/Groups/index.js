@@ -20,6 +20,16 @@ function Groups() {
         dispatch(fetchGroups())
     }, [dispatch]);
 
+    const renderGroupAbout = (text) => {
+        const segments = text.split(" ");
+
+        if (segments.length < 20){
+            return segments.join(" ");
+        } else {
+            return `${ segments.slice(0, 19).join(" ")}...`
+        }
+    }
+
     if (test === undefined) return null;
 
     return (
@@ -39,7 +49,7 @@ function Groups() {
                             <div className='group-city-state'>{group.city.toUpperCase()}, {group.state.toUpperCase()}</div>
                             <div className='group-organizer'> Organized by: {Object(Object(groups[0])['Organizer'])["firstName"]}</div>
                             {/* <div className = 'about-container'> */}
-                            <div className='group-about'>{group.about}</div>
+                            <div className='group-about'>{renderGroupAbout(group.about)}</div>
                             {/* </div> */}
                             <div className='group-member-pulic'>
                                 {group.numMembers} {group.numMembers === 1 ? "member" : "members"} · {group.private ? "Private" : "Public"}

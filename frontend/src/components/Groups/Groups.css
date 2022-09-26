@@ -1,6 +1,7 @@
 .group-right{
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .group-card {
@@ -8,7 +9,7 @@
     display: flex;
     flex-direction: row;
     width: 640px;
-    height: 250px;
+    height: 160px;
     padding: 20px 0px 0px 0px;
 }
 
@@ -77,14 +78,15 @@
     margin-top: 15px;
     margin-bottom: 15px;
     width: 400px;
-    height: 50px;
-    overflow: hidden;
+    /* min-height: 56px; */
 }
 
 .group-member-pulic {
     display: flex;
     color: grey;
     font-size: 14px;
+    position: absolute;
+    bottom: 16px;
 }
 
 .group-organizer {
