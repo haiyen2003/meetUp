@@ -96,6 +96,7 @@
     text-align: center;
     white-space: nowrap;
     padding: 0px 16px;
+    cursor: pointer;
 }
 
 .button:hover {
