@@ -40,8 +40,10 @@ export default function GroupDetails() {
             <div className='main-container'>
                 <div className='top-container_'>
                     <div className='left-top-container'>
-                        <img className='big-image' src={thisGroup.GroupImages[0].url}></img>
+                        {thisGroup.GroupImages && thisGroup.GroupImages[0] && <img className='big-image' src={thisGroup.GroupImages[0].url}></img>}
+                        {(!thisGroup.GroupImages || !thisGroup.GroupImages[0]) && <div className='place-holder-group-img' ></div>}
                     </div>
+
                     <div className='right-top-container'>
                         <div className='name'>{thisGroup.name}</div>
                         <div className='location'>🌍 {thisGroup.city}, {thisGroup.state}</div>

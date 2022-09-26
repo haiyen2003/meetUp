@@ -59,7 +59,8 @@ export default function EventDetails() {
                 </div>
                 <div className='top-container_'>
                     <div className='left-top-container'>
-                        <img className='big-image' src={thisEvent.EventImages[0].url} ></img>
+                        {thisEvent.EventImages && thisEvent.EventImages[0] && <img className='big-image' src={thisEvent.EventImages[0].url}></img>}
+                        {(!thisEvent.EventImages || !thisEvent.EventImages[0]) && <div className='place-holder-group-img' ></div>}
                     </div>
                     <div className='right-top-container'>
                         <div className='event-private-name'>
