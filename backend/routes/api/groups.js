@@ -561,18 +561,35 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
             endDate
         })
 
-        return res.json({
-            'id': newEvent.id,
-            'groupId': newEvent.groupId,
-            'venueId': newEvent.venueId,
-            'name': newEvent.name,
-            'type': newEvent.type,
-            'capacity': newEvent.capacity,
-            'price': newEvent.price,
-            'description': newEvent.description,
-            'startDate': newEvent.startDate,
-            'endDate': newEvent.endDate
+        const allEvents = await Event.findAll({
+            attributes: ['id', 'groupId', 'venueId', 'name', 'description', 'type', 'startDate', 'endDate'],
+            include: [
+                {
+                    model: Group,
+                    attributes: ['id', 'name', 'city', 'state'],
+
+                },
+                {
+                    model: Venue,
+                    attributes: ['id', 'city', 'state']
+                }
+            ],
+            where: { id: newEvent.id }
         });
+        return res.json(allEvents[0]);
+
+        // return res.json({
+        //     'id': newEvent.id,
+        //     'groupId': newEvent.groupId,
+        //     'venueId': newEvent.venueId,
+        //     'name': newEvent.name,
+        //     'type': newEvent.type,
+        //     'capacity': newEvent.capacity,
+        //     'price': newEvent.price,
+        //     'description': newEvent.description,
+        //     'startDate': newEvent.startDate,
+        //     'endDate': newEvent.endDate
+        // });
     }
 })
 

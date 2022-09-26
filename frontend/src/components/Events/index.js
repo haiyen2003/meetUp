@@ -13,6 +13,7 @@ function Events() {
 
     if (data) {
         events = Object.values(data);
+        console.log(events, 'THIS IS EVENTS -----');
     }
     useEffect(() => {
         dispatch(fetchEvents())

@@ -10,10 +10,10 @@ import { useParams } from 'react-router-dom';
 function CreateEventForm() {
     const history = useHistory();
     const { groupId } = useParams();
-    const group = useSelector((state) => state.groups[groupId]);
     const dispatch = useDispatch();
+    const group = useSelector((state) => state.groups[groupId]);
     const sessionUser = useSelector(state => state.session.user);
-    const [venueId, setVenueId] = useState(null);
+    const [venueId, setVenueId] = useState("");
     const [venueAddress, setVenueAddress] = useState('');
     const [name, setName] = useState('');
     const [type, setType] = useState('In person');
@@ -23,27 +23,28 @@ function CreateEventForm() {
     const [price, setPrice] = useState('');
     const [endDate, setEndDate] = useState('');
     const [errors, setErrors] = useState([]);
+    const [venue, setVenue] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    // const thisVenueId = group.Venues[0].id;
+    // const thisVenueAd = group.Venues[0].address;
+    useEffect(() => {
+        let venueId;
+        let venueAddress;
+        async function getVenues() {
+            const venues = await fetch(`/api/venues`)
+            const data = await venues.json();
+            console.log(data, 'this is data');
+            venueId = data.Venues[0].id;
+            venueAddress = data.Venues[0].address;
+            console.log(data.Venues, 'this is Venues Array');
+            console.log(data.Venues[0].id, data.Venues[0].address);
+            setVenue(data.Venues);
+        }
+        getVenues();
+    }, [dispatch, venueId, venueAddress]);
 
-    const thisVenueId = group.Venues[0].id;
-    const thisVenueAd = group.Venues[0].address;
-    // useEffect(() => {
-    //     let venueId;
-    //     let venueAddress;
 
-    //     async function getVenues() {
-    //         const venues = await fetch(`/api/venues`)
-    //         const data = await venues.json();
-    //         venueId = data.Venues[0].id;
-    //         venueAddress = data.Venues[0].address;
-    //         console.log(data.Venues, 'this is Venues Array');
-    //         console.log(data.Venues[0].id, data.Venues[0].address);
-    //     }
-    //     getVenues();
-    //     setVenueId(venueId);
-    //     setVenueAddress(venueAddress);
-    // }, []);
-
+    console.log(venue, 'THIS IS VENUE --------');
 
     if (!sessionUser) {
         return (
@@ -64,9 +65,9 @@ function CreateEventForm() {
         setSubmitted(true);
         const newStartDate = dateConverter(startDate);
         const newEndDate = dateConverter(endDate);
-        console.log(venueId);
+        console.log(venueId, 'handle submit venueId --------');
         const thisNewEventPayload = {
-            venueId: thisVenueId,
+            venueId: parseInt(venueId),
             groupId: parseInt(groupId),
             name,
             type,
@@ -88,7 +89,7 @@ function CreateEventForm() {
                 }
             })
     }
-    if (!group || !thisVenueId) return null;
+     if (!venue) return null;
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -157,10 +158,13 @@ function CreateEventForm() {
                     <label>Venue</label>
                     <select
                         value={venueId}
-                        onChange={e => setVenueId(e.target.value)}
+                        onChange={e => {setVenueId(e.target.value);
+                        console.log(e.target.value)}}
                         required
                     >
-                        <option value={thisVenueId}>{thisVenueAd}</option>
+                        {venue.map((v) => {
+                            return <option value={v.id}>{v.address}</option>
+                        })}
                     </select>
                 </div>
                 <button type='submit'>

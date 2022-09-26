@@ -78,8 +78,6 @@ router.get('/', async (req, res, next) => {
         pagination.limit = size;
         pagination.offset = size * (page - 1);
     }
-
-
     const allEvents = await Event.findAll({
         attributes: ['id', 'groupId', 'venueId', 'name','description', 'type', 'startDate', 'endDate'],
         include: [
@@ -160,7 +158,7 @@ router.get('/:eventId', async (req, res, next) => {
             [sequelize.fn('COUNT', sequelize.col('id')), 'numAttending']
         ]
     });
-  
+
     thisEvent.dataValues.numAttending = attendant[0].dataValues.numAttending;
     return res.json(
         thisEvent
