@@ -611,20 +611,20 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
     const thisGroupId = thisEvent.groupId;
     const thisGroup = await Group.findByPk(thisGroupId);
 
-    const currentStatus = await Membership.findOne({
-        where: {
-            groupId: thisGroupId,
-            userId: req.user.id
-        }
-    });
+    // const currentStatus = await Membership.findOne({
+    //     where: {
+    //         groupId: thisGroupId,
+    //         userId: req.user.id
+    //     }
+    // });
 
-    if (!currentStatus) {
-        res.status(403);
-        return res.json({
-            "message": 'Forbidden',
-            "statusCode": 403
-        })
-    }
+    // if (!currentStatus) {
+    //     res.status(403);
+    //     return res.json({
+    //         "message": 'Forbidden',
+    //         "statusCode": 403
+    //     })
+    // }
     if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         await thisEvent.destroy();
         res.status(200);

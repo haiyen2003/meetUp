@@ -23,21 +23,22 @@ function CreateEventForm() {
     const [price, setPrice] = useState('');
     const [endDate, setEndDate] = useState('');
     const [errors, setErrors] = useState([]);
-    const [venue, setVenue] = useState('');
+   const [venue, setVenue] = useState('');
     const [previewImage, setPreviewImage] = useState('');
     const [submitted, setSubmitted] = useState(false);
-    // const thisVenueId = group.Venues[0].id;
-    // const thisVenueAd = group.Venues[0].address;
+     const thisVenueId = group.Venues[0].id;
+    const thisVenueAd = group.Venues[0].address;
+    
     useEffect(() => {
         let venueId;
         let venueAddress;
         async function getVenues() {
             const venues = await fetch(`/api/venues`)
             const data = await venues.json();
-            console.log(data, 'this is data');
+            //console.log(data, 'this is data');
             venueId = data.Venues[0].id;
             venueAddress = data.Venues[0].address;
-            console.log(data.Venues, 'this is Venues Array');
+           //console.log(data.Venues, 'this is Venues Array');
             console.log(data.Venues[0].id, data.Venues[0].address);
             setVenue(data.Venues);
             setVenueId(data.Venues[0].id);
@@ -88,7 +89,7 @@ function CreateEventForm() {
                 }
             })
     }
-    if (!venue) return null;
+    if (!venueId) return null;
     return (
         <>
             <div className='form'>
@@ -188,7 +189,6 @@ function CreateEventForm() {
                                 value={venueId}
                                 onChange={e => {
                                     setVenueId(e.target.value);
-                                    console.log(e.target.value)
                                 }}
                                 required
                             >
