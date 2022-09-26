@@ -1,5 +1,5 @@
-# meetUp-clone-project
-FeastUp
+
+# FeastUp
 
 About: FeastUp is a website clone, inspired by Meetup. FeastUp is an online hub for foodies around the world to meet, greet and eat! Exploring new spots for food, from high end restaurants to picnic venues are our hobbies! Members can create groups and events to meet either online or in person. It is ideal for people who love food and sharing their passion with others.
 
