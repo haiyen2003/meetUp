@@ -187,6 +187,7 @@ export default function EditGroupForm() {
     const [isPrivate, setPrivate] = useState(group && group.private);
     const [errors, setErrors] = useState([]);
     const [submitted, setSubmitted] = useState(false);
+    const [previewImage, setPreviewImage] = useState('https://cdn.pixabay.com/photo/2016/12/27/17/10/pendulum-1934311_960_720.jpg');
 
     //this help get the data from the previous group (before editing);
     useEffect(() => {
@@ -203,7 +204,8 @@ export default function EditGroupForm() {
             type: type,
             private: isPrivate,
             city: city,
-            state: state
+            state: state,
+            previewImage:previewImage
         };
         // const thisEditGroup = await dispatch(editGroupThunk(groupId, thisEditGroupPayload));
         // console.log(thisEditGroup, 'THIS EDIT GROUP');
@@ -299,6 +301,17 @@ export default function EditGroupForm() {
                                 <option className='input-box' value={true}>Private</option>
                                 <option className='input-box' value={false}>Public</option>
                             </select>
+                        </div>
+                        <div className='field'>
+                            <label className='label'> {`Group Image URL (optional)`}</label>
+                            <input
+                                className='input-box'
+                                placeholder='State'
+                                type='text'
+                                value={previewImage}
+                                onChange={e => setPreviewImage(e.target.value)}
+                            >
+                            </input>
                         </div>
                     </div>
                     <button className='edit-group-button' type='submit'>

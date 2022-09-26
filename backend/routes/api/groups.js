@@ -690,7 +690,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
 //Edit a group based on its Id
 router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     const { groupId } = req.params;
-    let { name, about, type, private, city, state } = req.body;
+    let { name, about, type, private, city, state, previewImage } = req.body;
     if (private === 'true') { private = true };
     if (private === 'false') { private = false };
     const thisGroup = await Group.findByPk(groupId, {
@@ -711,6 +711,8 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
         ]
     });
 
+
+    
 
     if (!thisGroup) {
         res.status(404);
