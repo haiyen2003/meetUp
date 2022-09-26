@@ -45,13 +45,11 @@ function CreateEventForm() {
         getVenues();
     }, [dispatch, venueId, venueAddress]);
 
-
-    console.log(venue, 'THIS IS VENUE --------');
-
     if (!sessionUser) {
         return (
             <>
-                <h1> Please log in or sign up to create an event </h1></>
+                <div className='warning-container'>
+                    <div className='Warning'> Please log in or sign up to create an event </div></div></>
         )
     }
     function dateConverter(date) {

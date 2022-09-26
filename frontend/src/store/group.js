@@ -19,6 +19,22 @@ export const fetchGroups = () => async dispatch => {
     }
 }
 
+//Get all groups
+const GET_MY_GROUPS = 'groups/GET_MY_GROUPS';
+const getMyGroups = groups => {
+    return {
+        type: GET_MY_GROUPS,
+        groups
+    }
+}
+export const fetchMyGroups = () => async dispatch => {
+    const res = await csrfFetch('/api/groups/current');
+    if (res.ok) {
+        const groups = await res.json();
+        dispatch(getMyGroups(groups));
+        return groups;
+    }
+}
 //Get Groups by Id
 const GET_ONE_GROUP = 'groups/GET_ONE_GROUP';
 const getOneGroup = group => {
@@ -131,6 +147,10 @@ const groupsReducer = (state = initialState, action) => {
     let newState;
     switch (action.type) {
         case GET_ALL_GROUPS:
+            newState = { ...state };
+            newState = action.groups.Groups;
+            return newState;
+        case GET_MY_GROUPS:
             newState = { ...state };
             newState = action.groups.Groups;
             return newState;

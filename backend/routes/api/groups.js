@@ -162,7 +162,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
             }
         });
 
-
         let result = [];
         for (let group of currentGroups) {
             let jsonGroup = group.toJSON();

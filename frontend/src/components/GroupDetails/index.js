@@ -78,7 +78,7 @@ export default function GroupDetails() {
                             {thisGroup.about}
                         </div>
                     </div>
-                    <div className='bottom-right-container'>Organizer: {thisGroup.Organizer.firstName} {thisGroup.Organizer.lastName}</div>
+                    {/* <div className='bottom-right-container'>Organizer: {thisGroup.Organizer.firstName} {thisGroup.Organizer.lastName}</div> */}
                 </div>
                 <br />
             </div>

@@ -14,6 +14,7 @@ import Events from './components/Events';
 import EventDetails from "./components/EventDetails";
 import EditEventForm from "./components/EditEventForm";
 import Home from "./components/Home";
+import MyGroups from './components/MyGroups';
 
 function App() {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-           <Route exact path = '/'>
+          <Route exact path='/'>
             <Home />
           </Route>
           <Route exact path="/signup">
@@ -36,22 +37,25 @@ function App() {
           <Route path='/groups/:groupId/events/new'>
             <CreateEventForm />
           </Route>
-          <Route  path="/events/:eventId/edit">
+          <Route path="/events/:eventId/edit">
             <EditEventForm />
           </Route>
-          <Route  path="/events/:eventId">
+          <Route path="/events/:eventId">
             <EventDetails />
           </Route>
-          <Route  path='/groups/:groupId/edit'>
+          <Route path='/groups/:groupId/edit'>
             <EditGroupForm />
           </Route>
-          <Route  path='/groups/new'>
+          <Route path='/groups/new'>
             <CreateGroupForm />
           </Route>
-          <Route  path="/groups/:groupId">
+          <Route path='/groups/my'>
+            <MyGroups />
+          </Route>
+          <Route path="/groups/:groupId">
             <GroupDetails />
           </Route>
-          <Route  path="/groups">
+          <Route path="/groups">
             <Groups />
           </Route>
           <Route path="/events">
