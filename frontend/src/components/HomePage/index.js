@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 
 export default function HomePage() {
     const history = useHistory();
+
     return (
         <div className={style.mainDiv}>
             <div className={style.container}>
@@ -47,7 +48,7 @@ export default function HomePage() {
                         <div className={style.subImageCard}>
                             <img className={style.subImageCardRight} src={joinGroup} />
                         </div>
-                        <Link className={style.link} to='/groups/new'>
+                        <Link className={style.link} to="/signup">
                             <div className={style.subHeading}>Start a group</div></Link>
                         <div className={style.miniText}>You don’t have to be an expert to gather people together and explore shared interests.</div>
                     </div>

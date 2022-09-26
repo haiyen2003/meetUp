@@ -14,8 +14,8 @@ const validateGroup = [
     check('name')
         .exists({ checkFalsy: true })
         .withMessage('Name doesnot exist')
-        .isLength({ max: 60 })
-        .withMessage('Name must be 60 characters or less'),
+        .isLength({ min: 5, max: 60 })
+        .withMessage('Name must be between 5 to 60 characters'),
     check('about')
         .exists({ checkFalsy: true })
         .withMessage('About doesnot exist')
@@ -38,6 +38,21 @@ const validateGroup = [
     check('state')
         .exists({ checkFalsy: true })
         .withMessage('State is required'),
+    check('previewImage').custom((value) => {
+        console.log("checking image", value);
+
+        if (!value)
+            return true;
+
+        pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+
+        return !!pattern.test(str);
+    }).withMessage('Preview image must be a valid url'),
     handleValidationErrors
 ];
 
@@ -81,7 +96,9 @@ const validateEvent = [
         .withMessage("Price is invalid"),
     check('description')
         .exists({ checkFalsy: true })
-        .withMessage("Description is required"),
+        .withMessage("Description is required")
+        .isLength({ min: 30 })
+        .withMessage('Description must be 30 characters or more'),
     check('startDate')
         .exists({ checkFalsy: true })
         .isAfter()
@@ -93,7 +110,7 @@ const validateEvent = [
             }
             return true;
         })
-        .withMessage("End date is less than start date"),
+        .withMessage("End date must be after start date"),
     handleValidationErrors
 ];
 //get all Groups
@@ -533,6 +550,9 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, nex
 router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, next) => {
     let { groupId } = req.params;
     const userId = req.user.id;
+
+    console.log("CURRENT ID", userId);
+
     const { venueId, name, type, capacity, price, description, startDate, endDate, previewImage } = req.body;
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
@@ -557,6 +577,7 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
     // }
     if (thisGroup.organizerId === userId || currentStatus.status === 'co-host') {
         let newEvent = await Event.create({
+            organizerId: userId,
             groupId,
             venueId,
             name,
@@ -573,6 +594,11 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
             include: [
                 {
                     model: Group,
+                    attributes: ['id', 'name', 'city', 'state'],
+
+                },
+                {
+                    model: User,
                     attributes: ['id', 'name', 'city', 'state'],
 
                 },

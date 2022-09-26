@@ -1,11 +1,17 @@
 .event-card {
-    border-top: 0.5px solid grey;
+    border-top: 0.5px solid rgba(34, 34, 34, 0.2);
+    ;
     display: flex;
     flex-direction: row;
     width: 640px;
-    height: 160px;
+    height: 130px;
     padding: 20px 0px 0px 0px;
     cursor: pointer;
+}
+
+.event-card:last-child {
+    border-bottom: 0.5px solid rgba(34, 34, 34, 0.2);
+    ;
 }
 
 .top-container {
@@ -21,10 +27,11 @@
     font-weight: bold;
 }
 
-.top-link-underlined{
+.top-link-underlined {
     border-bottom: 3px solid #008294;
-    color:#008294
+    color: #008294
 }
+
 /* .top-link:hover{
     color: #008294;
 } */

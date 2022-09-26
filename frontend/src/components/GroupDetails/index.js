@@ -48,7 +48,6 @@ export default function GroupDetails() {
                         <div className='name'>{thisGroup.name}</div>
                         <div className='location'>🌍 {thisGroup.city}, {thisGroup.state}</div>
                         <div className='members-public'>👥 {thisGroup.numMembers} {thisGroup.numMembers === 1 ? "member" : "members"} · {thisGroup.private ? "Private" : "Public"} group </div>
-
                         <div className='organizer'>👤 Organized by {thisGroup.Organizer.firstName}</div>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ function SignupFormPage() {
             <div className='form'>
                 <div className='title-div'>
                     <div className='Login-title'>Sign up</div>
-                    <div className='Signup-title'>Already a member? <NavLink className='signup-link' to="/login">Log in</NavLink> </div>
+                    {/* <div className='Signup-title'>Already a member? <NavLink className='signup-link' to="/login">Log in</NavLink> </div> */}
                 </div>
                 <form onSubmit={handleSubmit}>
                     <ul>

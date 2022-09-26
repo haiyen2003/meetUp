@@ -79,11 +79,19 @@ router.get('/', async (req, res, next) => {
         pagination.offset = size * (page - 1);
     }
     const allEvents = await Event.findAll({
-        attributes: ['id', 'groupId', 'venueId', 'name','description', 'type', 'startDate', 'endDate'],
+        attributes: ['id', 'groupId', 'venueId', 'name', 'description', 'type', 'startDate', 'endDate'],
         include: [
             {
                 model: Group,
                 attributes: ['id', 'name', 'city', 'state'],
+                nested: true,
+                include: [
+                    {
+                        model: User,
+                        as: 'Organizer',
+                        attributes: ['id', 'firstName', 'lastName']
+                    }
+                ]
 
             },
             {
@@ -131,6 +139,14 @@ router.get('/:eventId', async (req, res, next) => {
             {
                 model: Group,
                 attributes: ['id', 'organizerId', 'name', 'private', 'city', 'state'],
+                nested: true,
+                include: [
+                    {
+                        model: User,
+                        as: 'Organizer',
+                        attributes: ['id', 'firstName', 'lastName']
+                    }
+                ]
 
             },
             {
@@ -363,6 +379,7 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
 router.put('/:eventId', requireAuth, validateEvent, async (req, res, next) => {
     let { eventId } = req.params;
     const thisEvent = await Event.findByPk(eventId);
+
     if (!thisEvent) {
         res.status(404);
         const error = new Error("Event couldnt be found");
@@ -594,20 +611,20 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
     const thisGroupId = thisEvent.groupId;
     const thisGroup = await Group.findByPk(thisGroupId);
 
-    // const currentStatus = await Membership.findOne({
-    //     where: {
-    //         groupId: thisGroupId,
-    //         userId: req.user.id
-    //     }
-    // });
+    const currentStatus = await Membership.findOne({
+        where: {
+            groupId: thisGroupId,
+            userId: req.user.id
+        }
+    });
 
-    // if (!currentStatus) {
-    //     res.status(403);
-    //     return res.json({
-    //         "message": 'Forbidden',
-    //         "statusCode": 403
-    //     })
-    // }
+    if (!currentStatus) {
+        res.status(403);
+        return res.json({
+            "message": 'Forbidden',
+            "statusCode": 403
+        })
+    }
     if (thisGroup.organizerId === req.user.id || currentStatus.status === 'co-host') {
         await thisEvent.destroy();
         res.status(200);

@@ -20,19 +20,26 @@
     color: grey;
 }
 
-.bottom-bar{
+.bottom-bar {
     display: flex;
     flex-direction: column;
     align-items: left;
 }
-.event-private{
+
+.event-private {
     font-size: 16px;
     color: grey;
 }
-.public_{
+
+.public_ {
     font-size: 16px;
     color: grey;
 }
-.about{
+
+.about {
+    font-size: 16px;
+}
+
+.host-name {
     font-size: 16px;
 }

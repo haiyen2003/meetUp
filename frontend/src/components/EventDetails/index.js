@@ -56,6 +56,7 @@ export default function EventDetails() {
                 <div className='event-top-container'>
                     <div className='public_'>{<div>{properFinalDay}</div>}</div>
                     <div className='name'>{thisEvent.name}</div>
+                    <div className='host-name'>Hosted by {thisEvent.Group.Organizer.firstName}</div>
                 </div>
                 <div className='top-container_'>
                     <div className='left-top-container'>

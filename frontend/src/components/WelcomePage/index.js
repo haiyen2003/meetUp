@@ -5,8 +5,8 @@ export default function WelcomePage() {
     const sessionUser = useSelector(state => state.session.user);
     return (
         <>
-            <div className='top-container'>
-                <h1 className='message'>Welcome back, {sessionUser.firstName} 👋</h1>
+            <div className='welcome-top-container'>
+                <h1 className='message'>Welcome, {sessionUser.firstName} 👋</h1>
             </div>
             <Groups />
         </>

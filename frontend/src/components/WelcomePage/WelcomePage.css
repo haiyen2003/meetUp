@@ -1,4 +1,4 @@
-.top-container{
+.welcome-top-container {
     display: flex;
-    padding-left: 60px;
+    flex-direction: row;
 }
