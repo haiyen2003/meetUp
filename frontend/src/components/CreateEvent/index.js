@@ -40,6 +40,7 @@ function CreateEventForm() {
             console.log(data.Venues, 'this is Venues Array');
             console.log(data.Venues[0].id, data.Venues[0].address);
             setVenue(data.Venues);
+            setVenueId(data.Venues[0].id);
         }
         getVenues();
     }, [dispatch, venueId, venueAddress]);
