@@ -33,6 +33,22 @@ export const fetchOneEvent = id => async dispatch => {
     }
 }
 
+//get event by groupId
+const GET_GROUP_EVENT = 'events/GET_GROUP_EVENT';
+const getGroupEvent = event => {
+    return {
+        type: GET_GROUP_EVENT,
+        event
+    }
+}
+export const fetchGroupEvent = groupId => async dispatch => {
+    const res = await csrfFetch(`/api/groups/${groupId}/events`);
+    if (res.ok) {
+        const events = await res.json();
+        dispatch(getGroupEvent(events));
+    }
+}
+
 //Create Event
 const CREATE_EVENT = 'events/CREATE_EVENT';
 const createEvent = (event) => {
@@ -121,6 +137,10 @@ const eventsReducer = (state = initialState, action) => {
     let newState;
     switch (action.type) {
         case GET_ALL_EVENTS:
+            newState = { ...state };
+            newState = action.events.Events;
+            return newState;
+        case GET_GROUP_EVENT:
             newState = { ...state };
             newState = action.events.Events;
             return newState;

@@ -39,20 +39,11 @@ const validateGroup = [
         .exists({ checkFalsy: true })
         .withMessage('State is required'),
     check('previewImage').custom((value) => {
-        console.log("checking image", value);
-
-        if (!value)
-            return true;
-
-        pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-
-        return !!pattern.test(str);
-    }).withMessage('Preview image must be a valid url'),
+        if (value.includes('jpg') || value.includes('jpeg') || value.includes('png')) {
+            return true
+        }
+        else { throw new Error('Preview image must be a valid url') }
+    }),
     handleValidationErrors
 ];
 

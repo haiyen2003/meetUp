@@ -65,7 +65,6 @@ function CreateEventForm() {
         setSubmitted(true);
         const newStartDate = dateConverter(startDate);
         const newEndDate = dateConverter(endDate);
-        console.log(venueId, 'handle submit venueId --------');
         const thisNewEventPayload = {
             venueId: parseInt(venueId),
             groupId: parseInt(groupId),
@@ -84,7 +83,6 @@ function CreateEventForm() {
             })
             .catch(async (res) => {
                 const data = await res.json();
-                console.log(data, 'THIS IS DATA');
                 if (data && data.errors) {
                     setErrors(data.errors);
                 }

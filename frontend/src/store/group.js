@@ -101,12 +101,6 @@ export const editGroupThunk = (id, group) => async (dispatch) => {
     const res = await csrfFetch(`/api/groups/${id}`, {
         method: 'PUT',
         body: JSON.stringify(
-            // name,
-            // about,
-            // type,
-            // city,
-            // state,
-            // private: isPrivate,
             group
         ),
         headers: { 'Content-Type': 'application/json' },

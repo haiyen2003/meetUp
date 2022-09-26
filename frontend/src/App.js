@@ -15,6 +15,7 @@ import EventDetails from "./components/EventDetails";
 import EditEventForm from "./components/EditEventForm";
 import Home from "./components/Home";
 import MyGroups from './components/MyGroups';
+import GroupEvents from "./components/GroupEvents";
 
 function App() {
   const dispatch = useDispatch();
