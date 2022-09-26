@@ -28,7 +28,7 @@ function CreateEventForm() {
     const [submitted, setSubmitted] = useState(false);
      const thisVenueId = group.Venues[0].id;
     const thisVenueAd = group.Venues[0].address;
-    
+
     useEffect(() => {
         let venueId;
         let venueAddress;
@@ -89,7 +89,7 @@ function CreateEventForm() {
                 }
             })
     }
-    if (!venueId) return null;
+    if (!venue) return null;
     return (
         <>
             <div className='form'>
