@@ -23,7 +23,9 @@ function CreateGroupForm() {
     if (!sessionUser) {
         return (
             <>
-                <h1> Please log in or sign up to create a group</h1>
+                <div className='warning-container'>
+                    <div className='Warning'>Please log in or sign up to create a group </div>
+                </div>
             </>
         )
     }
