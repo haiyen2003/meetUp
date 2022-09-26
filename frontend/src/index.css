@@ -46,5 +46,12 @@ ul {
     padding: 0px;
 }
 
-/* 
+/*
 } */
+.empty-image {
+    display: flex;
+    background: #e4e9f2 url('../public/images.png') center center no-repeat;
+    width: 170px;
+    height: 100%;
+    border-radius: 8px;
+}

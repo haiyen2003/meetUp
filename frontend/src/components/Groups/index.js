@@ -23,10 +23,10 @@ function Groups() {
     const renderGroupAbout = (text) => {
         const segments = text.split(" ");
 
-        if (segments.length < 20){
+        if (segments.length < 20) {
             return segments.join(" ");
         } else {
-            return `${ segments.slice(0, 19).join(" ")}...`
+            return `${segments.slice(0, 19).join(" ")}...`
         }
     }
 
@@ -42,7 +42,8 @@ function Groups() {
                 {groups.map((group) => (
                     <div className='group-card'>
                         <div className='group-left'>
-                            <img className='image' src={group.previewImage} alt='group-img'></img>
+                            {!group.previewImage && <div className='empty-image'></div>}
+                            {group.previewImage && <img className='image' src={group.previewImage} alt='group-img'></img>}
                         </div>
                         <div className='group-right'>
                             <NavLink className='group-name' to={`/groups/${group.id}`}>{group.name}</NavLink>

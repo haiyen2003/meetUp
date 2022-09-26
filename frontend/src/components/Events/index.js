@@ -43,7 +43,8 @@ function Events() {
                     return (
                         <div className='event-card'>
                             <div className='group-left'>
-                                <img className='image' src={event.previewImage} alt='group-img'></img>
+                                {!event.previewImage && <div className='empty-image'></div>}
+                                {event.previewImage && <img className='image' src={event.previewImage} alt={event.name}></img>}
                             </div>
                             <div className='group-right'>
                                 <div className='event-about'>{newDay}, {newDate} {newMonth} · {newTime[0]}</div>

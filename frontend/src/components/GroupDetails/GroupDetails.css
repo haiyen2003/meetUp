@@ -37,9 +37,10 @@
     flex-direction: row;
     align-items: center;
     height: 66px;
-    padding: 0px 0px 0px 500px;
     border-bottom: 0.5px solid rgba(34, 34, 34, 0.2);
     border-top: 0.5px solid rgba(34, 34, 34, 0.2);
+    width: 600px;
+    justify-content: flex-end;
 }
 
 .bottom-container {
@@ -94,6 +95,8 @@
     font-weight: 600;
     height: 40px;
     text-align: center;
+    white-space: nowrap;
+    padding: 0px 16px;
 }
 
 .button:hover {
@@ -109,7 +112,7 @@
     font-style: italic;
 }
 
-.place-holder-group-img{
+.place-holder-group-img {
     width: 600px;
     height: 360px;
     border-radius: 20px;

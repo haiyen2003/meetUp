@@ -22,20 +22,11 @@ export default function EventDetails() {
         history.push(path);
     }
 
-    let properFinalDay = '';
+    let properStartDate = '';
+    let properEndDate = '';
     if (thisEvent) {
-        let date = thisEvent.startDate;
-        let properDate = new Date(date);
-        let day = properDate.getDay();
-        let month = properDate.getMonth();
-        let time = thisEvent.startDate.split('T');
-        let newTime = time[1].split('.');
-        let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        let dayArray = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun'];
-        let newDay = dayArray[day];
-        let newMonth = monthArray[month];
-        let newDate = properDate.getDate();
-        properFinalDay = `${newDay}, ${newDate} ${newMonth} · ${newTime[0]}`
+        properStartDate = (new Date(thisEvent.startDate)).toLocaleString();
+        properEndDate = (new Date(thisEvent.endDate)).toLocaleString();
     }
     useEffect(() => {
         dispatch(fetchOneEvent(eventId));
@@ -54,7 +45,7 @@ export default function EventDetails() {
             {/* {showProperFullDate(thisEvent.startDate)} */}
             <div className='main-container'>
                 <div className='event-top-container'>
-                    <div className='public_'>{<div>{properFinalDay}</div>}</div>
+                    <div className='public_'>{<div>{properStartDate}</div>}</div>
                     <div className='name'>{thisEvent.name}</div>
                     <div className='host-name'>Hosted by {thisEvent.Group.Organizer.firstName}</div>
                 </div>
@@ -70,7 +61,7 @@ export default function EventDetails() {
                         </div>
                         <br />
                         <div className='event-start-end'>
-                            <div>{thisEvent.startDate} to {thisEvent.endDate}
+                            <div>{properStartDate} to {properEndDate}
                             </div>
                             <div className='event-private'>{thisEvent.type} event</div>
                         </div>

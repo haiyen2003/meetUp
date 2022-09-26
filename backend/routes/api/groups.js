@@ -595,12 +595,14 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
                 {
                     model: Group,
                     attributes: ['id', 'name', 'city', 'state'],
-
-                },
-                {
-                    model: User,
-                    attributes: ['id', 'name', 'city', 'state'],
-
+                    nested: true,
+                    include: [
+                        {
+                            model: User,
+                            as: 'Organizer',
+                            attributes: ['id', 'firstName', 'lastName']
+                        }
+                    ]
                 },
                 {
                     model: Venue,
