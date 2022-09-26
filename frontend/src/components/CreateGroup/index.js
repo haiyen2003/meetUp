@@ -42,8 +42,10 @@ function CreateGroupForm() {
             state: state,
             previewImage: previewImage
         };
+        console.log(thisNewGroupPayload, 'this new payload ------');
         return dispatch(createGroupThunk(thisNewGroupPayload))
             .then(() => {
+
                 history.push(`/groups/`);
             })
             .catch(async (res) => {
@@ -58,7 +60,7 @@ function CreateGroupForm() {
         <>
             <div className='form'>
                 <div className='title-div'>
-                    <div className='top-title'>Creat a group</div>
+                    <div className='top-title'>Create a group</div>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <ul>

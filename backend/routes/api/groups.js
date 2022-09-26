@@ -392,7 +392,7 @@ router.get('/:groupId/members', async (req, res, next) => {
 
 //create a group
 router.post('/', requireAuth, validateGroup, async (req, res, next) => {
-    let { name, about, type, private, city, state } = req.body;
+    let { name, about, type, private, city, state, previewImage } = req.body;
 
     const organizerId = req.user.id;
     // if (private === 'true') { private = true };
@@ -405,7 +405,8 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         type,
         private,
         city,
-        state
+        state,
+        //previewImage
     });
     let venue = await Venue.create({
         groupId: newGroup.id,
@@ -415,6 +416,14 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         lat: 90.00,
         lng: 90.00
     })
+
+    if (previewImage) {
+        let newImage = await GroupImage.create({
+            groupId: newGroup.id,
+            preview: true,
+            url: previewImage
+        })
+    }
     //should create a new image in Image table;
     // const newImage = await Membership.create({
     //     userId: organizerId,
@@ -524,9 +533,7 @@ router.post('/:groupId/venues', requireAuth, validateVenue, async (req, res, nex
 router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, next) => {
     let { groupId } = req.params;
     const userId = req.user.id;
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
-    console.log(req.body, 'THIS IS REQ BODY BACKEND -----');
-    console.log(groupId, 'THIS IS GROUP ID BACKEND -----');
+    const { venueId, name, type, capacity, price, description, startDate, endDate, previewImage } = req.body;
     const thisGroup = await Group.findByPk(groupId);
     if (!thisGroup) {
         res.status(404);
@@ -576,6 +583,15 @@ router.post('/:groupId/events', requireAuth, validateEvent, async (req, res, nex
             ],
             where: { id: newEvent.id }
         });
+
+        if (previewImage) {
+            let newImage = await EventImage.create({
+                eventId: newEvent.id,
+                preview: true,
+                url: previewImage
+            })
+        }
+
         return res.json(allEvents[0]);
 
         // return res.json({

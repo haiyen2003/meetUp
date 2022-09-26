@@ -44,7 +44,7 @@ const createEvent = (event) => {
 
 export const createEventThunk = (payload) => async (dispatch) => {
     console.log(payload, 'this is payload -----');
-    const { groupId, venueId, name, type, capacity, price, description, startDate, endDate } = payload;
+    const { groupId, venueId, name, type, capacity, price, description, startDate, endDate, previewImage } = payload;
     console.log(payload.groupId, 'THIS IS GROUP ID');
     const res = await csrfFetch(`/api/groups/${groupId}/events`, {
         method: 'POST',
@@ -57,7 +57,8 @@ export const createEventThunk = (payload) => async (dispatch) => {
             price,
             description,
             startDate,
-            endDate
+            endDate,
+            previewImage
         }),
     })
     const data = await res.json();

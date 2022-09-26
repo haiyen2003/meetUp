@@ -24,6 +24,7 @@ function CreateEventForm() {
     const [endDate, setEndDate] = useState('');
     const [errors, setErrors] = useState([]);
     const [venue, setVenue] = useState('');
+    const [previewImage, setPreviewImage] = useState('');
     const [submitted, setSubmitted] = useState(false);
     // const thisVenueId = group.Venues[0].id;
     // const thisVenueAd = group.Venues[0].address;
@@ -75,7 +76,8 @@ function CreateEventForm() {
             price,
             description,
             startDate: newStartDate,
-            endDate: newEndDate
+            endDate: newEndDate,
+            previewImage: previewImage
         }
         return dispatch(createEventThunk(thisNewEventPayload))
             .then(() => {
@@ -89,88 +91,133 @@ function CreateEventForm() {
                 }
             })
     }
-     if (!venue) return null;
+    if (!venue) return null;
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <ul>
-                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-                </ul>
-                <div>
-                    <label>Name</label>
-                    <input
-                        placeholder='Your event name'
-                        type='text'
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        required
-                    />
-                    <label>Description</label>
-                    <input
-                        placeholder='Tell us more about your event'
-                        type='text'
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        required
-                    />
-                    <label>Type</label>
-                    <select
-                        placeholder='Online or In person'
-                        value={type}
-                        onChange={e => setType(e.target.value)}
-                        required
-                    >
-                        <option value={'In person'}>In person</option>
-                        <option value={'Online'}>Online</option>
-                    </select>
-                    <label>Capacity</label>
-                    <input
-                        placeholder='Maximum capacity'
-                        type='text'
-                        value={capacity}
-                        onChange={e => setCapacity(e.target.value)}
-                        required
-                    />
-                    <label>Price</label>
-                    <input
-                        placeholder='Attending fee (if any)'
-                        type='number'
-                        value={price}
-                        onChange={e => setPrice(e.target.value)}
-                        required
-                    >
-                    </input>
-
-                    <input
-                        placeholder='Event start date'
-                        type='datetime-local'
-                        value={startDate}
-                        onChange={e => setStartDate(e.target.value)}
-                    >
-                    </input>
-                    <input
-                        placeholder='Event end date'
-                        type='datetime-local'
-                        value={endDate}
-                        onChange={e => setEndDate(e.target.value)}
-                    >
-                    </input>
-                    <label>Venue</label>
-                    <select
-                        value={venueId}
-                        onChange={e => {setVenueId(e.target.value);
-                        console.log(e.target.value)}}
-                        required
-                    >
-                        {venue.map((v) => {
-                            return <option value={v.id}>{v.address}</option>
-                        })}
-                    </select>
+            <div className='form'>
+                <div className='title-div'>
+                    <div className='top-title'>Create an event</div>
                 </div>
-                <button type='submit'>
-                    Create Event
-                </button>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    <ul>
+                        {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+                    </ul>
+
+                    <div className='top-field'>
+                        <div className='field'>
+                            <label className='label'>Name</label>
+                            <input
+                                className='input-box'
+                                placeholder='Your event name'
+                                type='text'
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Description</label>
+                            <input
+                                className='input-box'
+                                placeholder='Tell us more about your event'
+                                type='text'
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Type</label>
+                            <select
+                                className='dropdown-option'
+                                placeholder='Online or In person'
+                                value={type}
+                                onChange={e => setType(e.target.value)}
+                                required
+                            >
+                                <option className='dropdown-option' value={'In person'}>In person</option>
+                                <option className='dropdown-option' value={'Online'}>Online</option>
+                            </select>
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Capacity</label>
+                            <input
+                                className='input-box'
+                                placeholder='Maximum capacity'
+                                type='text'
+                                value={capacity}
+                                onChange={e => setCapacity(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Price</label>
+                            <input
+                                className='input-box'
+                                placeholder='Attending fee (if any)'
+                                type='number'
+                                value={price}
+                                onChange={e => setPrice(e.target.value)}
+                                required
+                            >
+                            </input>
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Start Date</label>
+                            <input
+                                className='input-box'
+                                placeholder='Event start date'
+                                type='datetime-local'
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                            >
+                            </input>
+                        </div>
+                        <div className='field'>
+                            <label className='label'>End Date</label>
+                            <input
+                                className='input-box'
+                                placeholder='Event end date'
+                                type='datetime-local'
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
+                            >
+                            </input>
+                        </div>
+                        <div className='field'>
+                            <label className='label'>Venue</label>
+                            <select
+                                className='dropdown-option'
+                                value={venueId}
+                                onChange={e => {
+                                    setVenueId(e.target.value);
+                                    console.log(e.target.value)
+                                }}
+                                required
+                            >
+                                {venue.map((v) => {
+                                    return <option value={v.id}>{v.address}</option>
+                                })}
+                            </select>
+                        </div>
+                        <div className='field'>
+                            <label className='label'> {`Group Image URL (optional)`}</label>
+                            <input
+                                className='input-box'
+                                placeholder='State'
+                                type='text'
+                                value={previewImage}
+                                onChange={e => setPreviewImage(e.target.value)}
+                            >
+                            </input>
+                        </div>
+                    </div>
+
+                    <button className='edit-group-button' type='submit'>
+                        Create Event
+                    </button>
+                </form>
+            </div>
         </>
     )
 }
