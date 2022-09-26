@@ -2,16 +2,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
+import { useHistory } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-
+  const history = useHistory();
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
   };
-
+  const setRoute = () => {
+    history.push('/groups/my')
+  }
   useEffect(() => {
     if (!showMenu) return;
 
@@ -38,10 +41,13 @@ function ProfileButton({ user }) {
       </div>
       {showMenu && (
         <ul className="profile-dropdown">
-          <li>{user.firstName}</li>
+          <li>Hello, {user.firstName}</li>
           <li>{user.email}</li>
           <li>
-            <button onClick={logout}>Log Out</button>
+            <button className='dropdown-button' onClick={setRoute}>My Groups</button>
+          </li>
+          <li>
+            <button className='dropdown-button' onClick={logout}>Log Out</button>
           </li>
         </ul>
       )}

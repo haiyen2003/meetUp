@@ -73,3 +73,6 @@ ul {
     color:#f65858;
     cursor: pointer;
 }
+.dropdown-button:hover{
+font-weight: bold;
+}

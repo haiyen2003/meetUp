@@ -1,4 +1,5 @@
 .welcome-top-container {
+    padding-left: 40px;
     display: flex;
     flex-direction: row;
 }
