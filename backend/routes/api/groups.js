@@ -701,10 +701,24 @@ router.put('/:groupId', requireAuth, validateGroup, async (req, res, next) => {
     let { name, about, type, private, city, state } = req.body;
     if (private === 'true') { private = true };
     if (private === 'false') { private = false };
-    console.log('GROUP ID FROM BACK END --------', groupId);
-    console.log(typeof (+groupId), 'TYPE OF GROUP ID ------')
-    const thisGroup = await Group.findByPk(+groupId);
-    console.log('THIS GROUP BACKEND ----', thisGroup);
+    const thisGroup = await Group.findByPk(groupId, {
+        include: [
+            {
+                model: GroupImage,
+                attributes: ['id', 'url', 'preview']
+            },
+            {
+                model: User,
+                as: 'Organizer',
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng']
+            }
+        ]
+    });
+
 
     if (!thisGroup) {
         res.status(404);
